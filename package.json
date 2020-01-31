@@ -1,0 +1,36 @@
+{
+  "name": "@quickcase/node-toolkit",
+  "version": "0.0.0",
+  "description": "NodeJS toolkit for QuickCase",
+  "main": "index.js",
+  "module": "main.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/quickcase/node-toolkit.git"
+  },
+  "author": "QuickCase",
+  "bugs": {
+    "url": "https://github.com/quickcase/node-toolkit/issues"
+  },
+  "homepage": "https://github.com/quickcase/node-toolkit#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "dependencies": {
+    "esm": "^3.2.25"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "jest": "^25.1.0"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": ["@babel/plugin-transform-modules-commonjs"]
+      }
+    }
+  }
+}

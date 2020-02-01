@@ -20,6 +20,7 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "dependencies": {
+    "axios": "^0.19.2",
     "esm": "^3.2.25"
   },
   "devDependencies": {
@@ -29,7 +30,9 @@
   "babel": {
     "env": {
       "test": {
-        "plugins": ["@babel/plugin-transform-modules-commonjs"]
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
       }
     }
   }

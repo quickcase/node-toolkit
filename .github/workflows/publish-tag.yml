@@ -32,7 +32,7 @@ jobs:
       - name: Install deps
         run: npm ci
       - name: Run tests
-        run: npm test
+        run: npm test -- --coverage
       - name: Audit dependencies
         run: npm audit --audit-level=low
 

@@ -11,8 +11,47 @@ npm i @quickcase/node-toolkit
 
 ## Toolkit API
 
+* [Case](#case)
 * [HTTP Client](#http-client)
 * [Search](#search)
+
+### Case
+
+#### fieldExtractor(aCase)(path)
+
+Extract the value of a field from the given case.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| aCase | object | Required. A case object as returned by QuickCase's Data Store |
+| path | string | Required. Path to a field, expressed using object notation |
+
+##### Returns
+
+Value of the specified field; or `undefined` if path cannot be found in case data.
+
+#### Example
+
+```javascript
+import {fieldExtractor} from '@quickcase/node-toolkit';
+
+const aCase = {
+  id: '1234123412341234',
+  state: 'Open',
+  data: {
+    complex1: { field1: 'value1' },
+    field2: 'value2',
+  }
+};
+
+// Prepare fields for extraction
+const fields = fieldExtractor(aCase);
+// Extract
+const field1 = fields('complex1.field1');
+const field2 = fields('field2');
+```
 
 ### HTTP Client
 

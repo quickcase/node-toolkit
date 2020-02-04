@@ -56,6 +56,31 @@ const field2 = fields('field2');
 
 ### Field
 
+#### isNo(value)
+
+Check the value of a `YesOrNo` field.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| value | any | Required. The value to compare against `No` ignoring case |
+
+##### Returns
+
+`true` if the field matched `No` ignoring case; `false` otherwise.
+
+#### Example
+
+```javascript
+import {isNo} from '@quickcase/node-toolkit';
+
+isNo('No'); // true
+isNo('no'); // true
+isNo(null); // false
+isNo('Yes'); // false
+```
+
 #### isYes(value)
 
 Check the value of a `YesOrNo` field.

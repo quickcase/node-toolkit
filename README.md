@@ -12,6 +12,7 @@ npm i @quickcase/node-toolkit
 ## Toolkit API
 
 * [Case](#case)
+* [Field](#field)
 * [HTTP Client](#http-client)
 * [Search](#search)
 
@@ -51,6 +52,33 @@ const fields = fieldExtractor(aCase);
 // Extract
 const field1 = fields('complex1.field1');
 const field2 = fields('field2');
+```
+
+### Field
+
+#### isYes(value)
+
+Check the value of a `YesOrNo` field.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| value | any | Required. The value to compare against `Yes` ignoring case |
+
+##### Returns
+
+`true` if the field matched `Yes` ignoring case; `false` otherwise.
+
+#### Example
+
+```javascript
+import {isYes} from '@quickcase/node-toolkit';
+
+isYes('Yes'); // true
+isYes('yes'); // true
+isYes(null); // false
+isYes('No'); // false
 ```
 
 ### HTTP Client

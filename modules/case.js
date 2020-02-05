@@ -31,3 +31,24 @@ const field = (from) => (pathElements) => {
     }
   }
 };
+
+/**
+ * Check whether a string or number is a valid QuickCase case identifier.
+ *
+ * @param {string|number} identifier Identifier to validate
+ * @return {boolean} Whether the identifier is valid
+ */
+export const isCaseIdentifier = (identifier) => /\d{16}/.test(identifier) && checkDigit(identifier);
+
+const checkDigit = (number) => luhnSum(number) % 10 === 0;
+
+const luhnSum = (number) => String(number).split('')
+                                          .reverse()
+                                          .map(Number)
+                                          .reduce((acc, cur, i) => acc + luhnDigit(cur, i), 0);
+
+const luhnDigit = (digit, index) => index % 2 === 0 ? digit : luhnDouble(digit);
+
+const luhnDouble = (digit) => luhnCap(digit * 2);
+
+const luhnCap = (digit) => digit > 9 ? digit - 9 : digit;

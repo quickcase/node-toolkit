@@ -54,6 +54,30 @@ const field1 = fields('complex1.field1');
 const field2 = fields('field2');
 ```
 
+#### isCaseIdentifier(identifier)
+
+Validate that a string or number is a valid QuickCase identifier.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| identifier | number|string | Required. Identifier to validate |
+
+##### Returns
+
+`true` when identifier is valid (16 digits with correct check digit); `false` otherwise.
+
+#### Example
+
+```javascript
+import {isCaseIdentifier} from '@quickcase/node-toolkit';
+
+isCaseIdentifier('1234') // > false - Not 16 digits
+isCaseIdentifier('1234123412341234') // > false - Incorrect check digit
+isCaseIdentifier('1234123412341238') // > true - Correct check digit
+```
+
 ### Field
 
 #### isNo(value)

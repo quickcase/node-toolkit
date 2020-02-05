@@ -21,9 +21,18 @@ const query = (...criteria) => ({
   query: Object.assign({}, ...criteria),
 });
 
-const equals = (field, value) => ({
-  equals: {field, value},
+const matcher = (matcherName) => (field, value) => ({
+  [matcherName]: {field, value},
 });
+
+const equals = matcher('equals');
+const equalsIgnoreCase = matcher('equalsIgnoreCase');
+const equalsAny = matcher('equalsAny');
+const equalsAnyIgnoreCase = matcher('equalsAnyIgnoreCase');
+const hasValue = matcher('hasValue');
+const dateRange = matcher('dateRange');
+const contains = matcher('contains');
+const is = matcher('is');
 
 const and = (...criteria) => ({
   and: criteria,
@@ -54,13 +63,31 @@ const sortDesc = (field) => ({
   direction: 'desc',
 });
 
+const fromToDate = (date1, date2) => ({
+  from: date1,
+  to: date2
+});
+
+const collectionItem = (field, value) => ({
+  field, value
+});
+
 export const searchDsl = Object.freeze({
   and,
   equals,
+  equalsIgnoreCase,
+  equalsAny,
+  equalsAnyIgnoreCase,
+  hasValue,
+  dateRange,
+  contains,
+  is,
   page,
   query,
   or,
   sort,
   sortAsc,
   sortDesc,
+  fromToDate,
+  collectionItem,
 });

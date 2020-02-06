@@ -171,6 +171,33 @@ const client = httpClient('http://data-store:4452')(() => Promise.resolve('acces
 await grantUserAccess(client)('1234123412341238')('user-1')('[CREATOR]', '[OWNER]');
 ```
 
+#### revokeUserAccess(httpClient)(caseId)(userId)(...caseRoles)
+
+Revoke access to a case from a user.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+| userId | string | Required. Unique user identifier, from `sub` claim |
+
+##### Returns
+
+`Promise` resolved when permissions updated.
+
+#### Example
+
+```javascript
+import {revokeUserAccess, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to update case permissions
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+await revokeUserAccess(client)('1234123412341238')('user-1');
+```
+
 ### Field
 
 #### isNo(value)

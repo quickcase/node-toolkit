@@ -27,3 +27,21 @@ export const grantGroupAccess = grantAccess('groups');
  * @return {Promise} Promise resolved when permissions updated
  */
 export const grantUserAccess = grantAccess('users');
+
+const revokeAccess = (type) => (http) => (caseId) => async (entityId) => {
+  const url = `/cases/${caseId}/${type}/${entityId}`;
+  const body = {
+    case_roles: [],
+  };
+  return http.put(url, body);
+};
+
+/**
+ * Revoke access to a case from a user.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string|number} caseId 16-digit unique case identifier
+ * @param {string} userId Unique identifier for the user
+ * @return {Promise} Promise resolved when permissions updated
+ */
+export const revokeUserAccess = revokeAccess('users');

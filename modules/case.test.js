@@ -1,4 +1,9 @@
-import {fetchCase, fieldExtractor, isCaseIdentifier} from './case';
+import {
+  fetchCase,
+  fieldExtractor,
+  grantUserAccess,
+  isCaseIdentifier,
+} from './case';
 
 describe('fetchCase', () => {
   test('should fetch case by id', async () => {
@@ -64,6 +69,25 @@ describe('fieldExtractor', () => {
 
     const fieldValue = fieldExtractor(aCase)('level1.level2');
     expect(fieldValue).toBeUndefined();
+  });
+});
+
+describe('grantUserAccess', () => {
+  test('should grant access to user with given case roles', async () => {
+    const caseId = '1234123412341238';
+    const userId = 'user-123';
+    const httpStub = {
+      put: jest.fn(() => Promise.resolve({status: 204})),
+    };
+
+    await grantUserAccess(httpStub)(caseId)(userId)('[CREATOR]', '[OWNER]');
+
+    expect(httpStub.put).toHaveBeenCalledWith(`/cases/${caseId}/users/${userId}`, {
+      case_roles: [
+        '[CREATOR]',
+        '[OWNER]',
+      ],
+    });
   });
 });
 

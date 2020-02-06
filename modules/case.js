@@ -46,6 +46,23 @@ const field = (from) => (pathElements) => {
 };
 
 /**
+ * Grant access to a case to a user.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string|number} caseId 16-digit unique case identifier
+ * @param {string} userId Unique identifier for the user
+ * @param {...string} caseRoles Case roles to be granted, at least one required
+ * @return {Promise} Promise resolved with the case for the given identifier.
+ */
+export const grantUserAccess = (http) => (caseId) => (userId) => async (...caseRoles) => {
+  const url = `/cases/${caseId}/users/${userId}`;
+  const body = {
+    case_roles: caseRoles,
+  };
+  return http.put(url, body);
+};
+
+/**
  * Check whether a string or number is a valid QuickCase case identifier.
  *
  * @param {string|number} identifier Identifier to validate

@@ -234,9 +234,46 @@ Combine multiple criteria with the `AND` operator.
 
 Combine multiple criteria with the `OR` operator.
 
+##### contains(field, value)
+
+Build a criterion matching `MultiSelectList` and `Collection` fields which contains the provided value.
+
+`value` can either be a `string` in the case of `MultiSelectList`; or an object built with `collectionItem(field, value)` in the case of a `Collection`.
+
+Dynamic field names must be prefixed with `data.`.
+
+##### dateRange(field, range)
+
+Build a criterion matching `Date` and `DateTime` fields within a given range.
+`range` is an object build with `fromToDate(from, to)`.
+Dynamic field names must be prefixed with `data.`.
+
 ##### equals(field, value)
 
 Build a criterion matching on exactly equal values for given field.
+Dynamic field names must be prefixed with `data.`.
+
+##### equalsIgnoreCase(field, value)
+
+Similar to `equals(field, value)`, but case-insensitive.
+
+##### equalsAny(field, values)
+
+Build a criterion matching exactly anyone of the provided values.
+Dynamic field names must be prefixed with `data.`.
+
+##### equalsAnyIgnoreCase(field, values)
+
+Similar to `equalsAny(field, values)`, but case-insensitive.
+
+##### hasValue(field, boolean)
+
+Build a criterion matching fields that have a value (`true`) or don't have a value (`false`).
+Dynamic field names must be prefixed with `data.`.
+
+##### is(field, boolean)
+
+Build a criterion matching `YesOrNo` fields that are either `true` or `false`.
 Dynamic field names must be prefixed with `data.`.
 
 ##### sort(...instructions)
@@ -272,14 +309,21 @@ const searchClient = httpClient('http://data-store:4452')(() => Promise.resolve(
 
 const query = s.query(
   s.and(
+    s.contains('data.multiSelectField', 'VALUE_1'),
+    s.contains('data.collectionField', s.collectionItem('subfield1', 'value1')),
+    s.dateRange('data.dateField', s.fromToDate('2020-01-01', '2020-01-31')),
     s.equals('state', 'STATE_1'),
-    s.equals('data.field1', 'fooBar'),
+    s.equalsIgnoreCase('data.field1', 'fooBar'),
+    s.equalsAny('data.field2', ['VALUE_1', 'VALUE_2']),
+    s.equalsAnyIgnoreCase('data.field2', ['value_1', 'value_2']),
+    s.hasValue('data.field3', true),
+    s.is('data.yesOrNoField', true),
   )
 );
 
 const sort = s.sort(
   s.sortAsc('state'),
-  s.sortDesc('dara.field1'),
+  s.sortDesc('data.field1'),
 )
 
 const page = s.page(1, 30);

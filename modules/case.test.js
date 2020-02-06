@@ -1,6 +1,7 @@
 import {
   fetchCase,
   fieldExtractor,
+  grantGroupAccess,
   grantUserAccess,
   isCaseIdentifier,
 } from './case';
@@ -69,6 +70,25 @@ describe('fieldExtractor', () => {
 
     const fieldValue = fieldExtractor(aCase)('level1.level2');
     expect(fieldValue).toBeUndefined();
+  });
+});
+
+describe('grantGroupAccess', () => {
+  test('should grant access to group with given case roles', async () => {
+    const caseId = '1234123412341238';
+    const groupId = 'group-123';
+    const httpStub = {
+      put: jest.fn(() => Promise.resolve({status: 204})),
+    };
+
+    await grantGroupAccess(httpStub)(caseId)(groupId)('[CREATOR]', '[OWNER]');
+
+    expect(httpStub.put).toHaveBeenCalledWith(`/cases/${caseId}/groups/${groupId}`, {
+      case_roles: [
+        '[CREATOR]',
+        '[OWNER]',
+      ],
+    });
   });
 });
 

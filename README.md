@@ -171,6 +171,33 @@ const client = httpClient('http://data-store:4452')(() => Promise.resolve('acces
 await grantUserAccess(client)('1234123412341238')('user-1')('[CREATOR]', '[OWNER]');
 ```
 
+#### revokeGroupAccess(httpClient)(caseId)(groupId)(...caseRoles)
+
+Revoke access to a case from a group.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+| groupId | string | Required. Group identifier |
+
+##### Returns
+
+`Promise` resolved when permissions updated.
+
+#### Example
+
+```javascript
+import {revokeGroupAccess, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to update case permissions
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+await revokeGroupAccess(client)('1234123412341238')('group-1');
+```
+
 #### revokeUserAccess(httpClient)(caseId)(userId)(...caseRoles)
 
 Revoke access to a case from a user.

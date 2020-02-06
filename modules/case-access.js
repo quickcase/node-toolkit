@@ -37,6 +37,16 @@ const revokeAccess = (type) => (http) => (caseId) => async (entityId) => {
 };
 
 /**
+ * Revoke access to a case from a group.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string|number} caseId 16-digit unique case identifier
+ * @param {string} groupId Identifier for the group
+ * @return {Promise} Promise resolved when permissions updated
+ */
+export const revokeGroupAccess = revokeAccess('groups');
+
+/**
  * Revoke access to a case from a user.
  *
  * @param {httpClient} http Configured, ready-to-use HTTP client

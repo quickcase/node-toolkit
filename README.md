@@ -18,6 +18,40 @@ npm i @quickcase/node-toolkit
 
 ### Case
 
+#### fetchCase(httpClient)(caseId)()
+
+Fetch a case from QuickCase Data Store.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+
+##### Returns
+
+`Promise` resolved with the case matching the given identifier.
+
+#### Example
+
+```javascript
+import {fetchCase, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to fetch case
+const searchClient = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+const aCase = await fetchCase('1234123412341238')();
+/*
+{
+  id: '1234123412341238',
+  state: 'Active',
+  data: {...},
+  ...
+}
+*/
+```
+
 #### fieldExtractor(aCase)(path)
 
 Extract the value of a field from the given case.

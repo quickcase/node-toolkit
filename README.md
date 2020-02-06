@@ -39,9 +39,9 @@ Fetch a case from QuickCase Data Store.
 import {fetchCase, httpClient} from '@quickcase/node-toolkit';
 
 // A configured `httpClient` is required to fetch case
-const searchClient = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
 
-const aCase = await fetchCase('1234123412341238')();
+const aCase = await fetchCase(client)('1234123412341238')();
 /*
 {
   id: '1234123412341238',
@@ -86,6 +86,35 @@ const fields = fieldExtractor(aCase);
 // Extract
 const field1 = fields('complex1.field1');
 const field2 = fields('field2');
+```
+
+#### grantUserAccess(httpClient)(caseId)(userId)(...caseRoles)
+
+Grant access to a case to a user.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+| userId | string | Required. Unique user identifier, from `sub` claim |
+| caseRoles | ...string | At least one required. Case roles to be granted to the user for the given case. **Please note:** Case roles must be between square brackets |
+
+##### Returns
+
+`Promise` resolved when permissions updated.
+
+#### Example
+
+```javascript
+import {grantUserAccess, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to update case permissions
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+await grantUserAccess(client)('1234123412341238')('user-1')('[CREATOR]', '[OWNER]');
+*/
 ```
 
 #### isCaseIdentifier(identifier)

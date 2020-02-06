@@ -185,6 +185,7 @@ Configured HTTP client instance.
 {
   get: (relativeUrl) => Promise<Axios.Response>,
   post: (relativeUrl, body) => Promise<Axios.Response>,
+  put: (relativeUrl, body) => Promise<Axios.Response>,
 }
 ```
 

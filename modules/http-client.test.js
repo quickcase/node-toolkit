@@ -27,4 +27,15 @@ describe('httpClient', () => {
     expect(resp).toEqual(expectedResp);
     expect(axios.post).toHaveBeenCalledWith('http://data-store:4452/path/to/resource', body,{headers: {Authorization: 'Bearer access-token-123'}});
   });
+
+  test('should securely put resource', async () => {
+    const body = {foo: 'bar'};
+    const expectedResp = {status: 200};
+    axios.put.mockResolvedValue(expectedResp);
+
+    const resp = await httpClient(baseUrl)(tokenProviderStub).put('/path/to/resource', body);
+
+    expect(resp).toEqual(expectedResp);
+    expect(axios.put).toHaveBeenCalledWith('http://data-store:4452/path/to/resource', body,{headers: {Authorization: 'Bearer access-token-123'}});
+  });
 });

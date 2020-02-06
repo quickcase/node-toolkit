@@ -88,6 +88,34 @@ const field1 = fields('complex1.field1');
 const field2 = fields('field2');
 ```
 
+#### grantGroupAccess(httpClient)(caseId)(groupId)(...caseRoles)
+
+Grant access to a case to a group.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+| groupId | string | Required. Group identifier |
+| caseRoles | ...string | At least one required. Case roles to be granted to the user for the given case. **Please note:** Case roles must be between square brackets |
+
+##### Returns
+
+`Promise` resolved when permissions updated.
+
+#### Example
+
+```javascript
+import {grantGroupAccess, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to update case permissions
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+await grantGroupAccess(client)('1234123412341238')('group-1')('[CREATOR]', '[OWNER]');
+```
+
 #### grantUserAccess(httpClient)(caseId)(userId)(...caseRoles)
 
 Grant access to a case to a user.
@@ -114,7 +142,6 @@ import {grantUserAccess, httpClient} from '@quickcase/node-toolkit';
 const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
 
 await grantUserAccess(client)('1234123412341238')('user-1')('[CREATOR]', '[OWNER]');
-*/
 ```
 
 #### isCaseIdentifier(identifier)

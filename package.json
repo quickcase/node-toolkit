@@ -1,6 +1,6 @@
 {
   "name": "@quickcase/node-toolkit",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "NodeJS toolkit for QuickCase",
   "main": "index.js",
   "module": "main.js",
@@ -37,7 +37,9 @@
     }
   },
   "jest": {
-    "coverageReporters": ["text"],
+    "coverageReporters": [
+      "text"
+    ],
     "coverageThreshold": {
       "global": {
         "branches": 100,

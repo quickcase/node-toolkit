@@ -1,4 +1,23 @@
-import {fieldExtractor, isCaseIdentifier} from './case';
+import {fetchCase, fieldExtractor, isCaseIdentifier} from './case';
+
+describe('fetchCase', () => {
+  test('should fetch case by id', async () => {
+    const caseId = '1234123412341238';
+    const resData = {
+      id: caseId,
+      data: {},
+    };
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/cases/${caseId}`);
+        return Promise.resolve({data: resData});
+      },
+    };
+
+    const actualData = await fetchCase(httpStub)(caseId)();
+    expect(actualData).toEqual(resData);
+  });
+});
 
 describe('fieldExtractor', () => {
   test('should extract field from case `data`', () => {

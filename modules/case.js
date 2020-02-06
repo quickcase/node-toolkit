@@ -1,4 +1,17 @@
 /**
+ * Fetch a case from QuickCase Data Store by ID.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string|number} caseId 16-digit unique case identifier
+ * @return {Promise} Promise resolved with the case for the given identifier.
+ */
+export const fetchCase = (http) => (caseId) => async () => {
+  const url = `/cases/${caseId}`;
+  const res = await http.get(url);
+  return res.data;
+};
+
+/**
  * Given a case and the path to a field, extract the value of that field. When accessing case fields, this approach should
  * be preferred as a way to avoid hard references to case fields through the use of a fields map.
  *

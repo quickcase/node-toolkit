@@ -1,6 +1,7 @@
 import {
   grantGroupAccess,
   grantUserAccess,
+  revokeGroupAccess,
   revokeUserAccess,
 } from './case-access';
 
@@ -38,6 +39,22 @@ describe('grantUserAccess', () => {
         '[CREATOR]',
         '[OWNER]',
       ],
+    });
+  });
+});
+
+describe('revokeGroupAccess', () => {
+  test('should revoke access from group', async () => {
+    const caseId = '1234123412341238';
+    const groupId = 'group-123';
+    const httpStub = {
+      put: jest.fn(() => Promise.resolve({status: 204})),
+    };
+
+    await revokeGroupAccess(httpStub)(caseId)(groupId);
+
+    expect(httpStub.put).toHaveBeenCalledWith(`/cases/${caseId}/groups/${groupId}`, {
+      case_roles: [],
     });
   });
 });

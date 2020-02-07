@@ -15,6 +15,7 @@ npm i @quickcase/node-toolkit
 * [Case Access](#case-access)
 * [Field](#field)
 * [HTTP Client](#http-client)
+* [OAuth2](#oauth2)
 * [Search](#search)
 
 ### Case
@@ -301,6 +302,8 @@ Configured HTTP client instance.
   put: (relativeUrl, body) => Promise<Axios.Response>,
 }
 ```
+
+### OAuth2
 
 ### Search
 

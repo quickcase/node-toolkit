@@ -305,6 +305,41 @@ Configured HTTP client instance.
 
 ### OAuth2
 
+#### clientAccessTokenProvider(config)()
+
+Provides a valid OAuth2 client access token as per OAuth2's client credentials flow. This is used for Service-to-Service authentication.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Configuration (see below) |
+
+`config`:
+* `cacheTtl`: Number. Time-to-live for cache in seconds, defaults to 60
+* `tokenEndpoint`: URL of the OAuth2 `/token` endpoint on the IDAM server
+* `clientId`: OAuth2 client ID
+* `clientSecret`: OAuth2 client secret
+
+##### Returns
+
+`Promise` resolved with a valid access token, either from cache or newly generated.
+
+##### Example
+
+```javascript
+import {clientAccessTokenProvider} from '@quickcase/node-toolkit';
+
+const tokenProvider = clientAccessTokenProvider({
+  cacheTtl: 3600,
+  tokenEndpoint: 'https://idam/oauth2/token',
+  clientId: 'client',
+  clientSecret: 'secret',
+});
+
+const accessToken = await tokenProvider();
+```
+
 ### Search
 
 Search cases for a given case type using QuickCase's Data Store Search API v2.

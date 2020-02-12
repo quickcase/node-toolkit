@@ -340,6 +340,52 @@ const tokenProvider = clientAccessTokenProvider({
 const accessToken = await tokenProvider();
 ```
 
+#### exchangeOAuth2Code(config)(redirectUri)(code)
+
+Provided a valid OAuth2 code, exchange it for a full set of tokens in the context of an OIDC/OAuth2 authorization code grant.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Configuration (see below) |
+| redirectUri | string | Required. Redirect URI used to generate the OAuth2 code |
+| code | string | Required. OAuth2 code generated as part of user authorisation step |
+
+`config`:
+* `tokenEndpoint`: URL of the OAuth2 `/token` endpoint on the IDAM server
+* `clientId`: OAuth2 client ID
+* `clientSecret`: OAuth2 client secret
+
+##### Returns
+
+`Promise` resolved with a valid set of tokens
+
+##### Example
+
+```javascript
+import {exchangeOAuth2Code} from '@quickcase/node-toolkit';
+
+const config = {
+  clientId: 'string',
+  clientSecret: 'string',
+  tokenEndpoint: 'string',
+};
+
+const tokens = await exchangeOAuth2Code(config)('http://redirect-uri')('code123');
+
+/*
+tokens:
+{
+  "access_token": "...",
+  "id_token": "...",
+  "expires_in": 300, // seconds
+  "refresh_token": "...",
+  "refresh_expires_in": 1800, // seconds
+}
+*/
+```
+
 ### Search
 
 Search cases for a given case type using QuickCase's Data Store Search API v2.

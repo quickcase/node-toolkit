@@ -386,6 +386,51 @@ tokens:
 */
 ```
 
+#### refreshOAuth2Tokens(config)(refreshToken)
+
+Provided a valid OAuth2 refresh token, exchange it for a full set of tokens.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Configuration (see below) |
+| refreshToken | string | Required. Valid refresh token issued as part of an OAuth2 flow |
+
+`config`:
+* `tokenEndpoint`: URL of the OAuth2 `/token` endpoint on the IDAM server
+* `clientId`: OAuth2 client ID
+* `clientSecret`: OAuth2 client secret
+
+##### Returns
+
+`Promise` resolved with a valid set of tokens
+
+##### Example
+
+```javascript
+import {refreshOAuth2Tokens} from '@quickcase/node-toolkit';
+
+const config = {
+  clientId: 'string',
+  clientSecret: 'string',
+  tokenEndpoint: 'string',
+};
+
+const tokens = await refreshOAuth2Tokens(config)('refresh123');
+
+/*
+tokens:
+{
+  "access_token": "...",
+  "id_token": "...",
+  "expires_in": 300, // seconds
+  "refresh_token": "...",
+  "refresh_expires_in": 1800, // seconds
+}
+*/
+```
+
 ### Search
 
 Search cases for a given case type using QuickCase's Data Store Search API v2.

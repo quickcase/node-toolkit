@@ -1,12 +1,6 @@
 import {postToken} from './oauth2';
 
 /**
- * @typedef {object} OAuth2TokenConfig
- * @property {string} tokenEndpoint URL of the OAuth2 `/token` endpoint for the IDAM server
- * @property {string} clientId OAuth2 client ID
- * @property {string} clientSecret OAuth2 client secret
- */
-/**
  * Exchange an OAuth2 code for tokens as part of an OAuth2 authorization code grant.
  *
  * @param {OAuth2TokenConfig} config Configuration for generation of client access tokens

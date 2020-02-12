@@ -1,4 +1,4 @@
-import axios from 'axios';
+import {postToken} from './oauth2';
 
 const DEFAULT_CACHE_TTL = 60;
 
@@ -37,19 +37,11 @@ const scheduleExpiry = (cache) => (ttl) => {
 
 const expireCache = (cache) => () => cache.accessToken = undefined;
 
-const getNewToken = async (config) => extractToken(await requestToken(config));
+const getNewToken = async (config) => extractToken(await postToken(config, params(config)));
 
 const extractToken = (response) => response.data.access_token;
 
-const urlSearchParams = (config) => new URLSearchParams({
+const params = (config) => ({
   grant_type: 'client_credentials',
   client_id: config.clientId,
-});
-
-const authorizationHeader = (config) => 'Basic ' + Buffer.from(`${config.clientId}:${config.clientSecret}`).toString('base64');
-
-const requestToken = (config) => axios.post(config.tokenEndpoint, urlSearchParams(config), {
-  headers: {
-     authorization: authorizationHeader(config),
-  },
 });

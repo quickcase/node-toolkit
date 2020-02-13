@@ -172,7 +172,7 @@ const client = httpClient('http://data-store:4452')(() => Promise.resolve('acces
 await grantUserAccess(client)('1234123412341238')('user-1')('[CREATOR]', '[OWNER]');
 ```
 
-#### revokeGroupAccess(httpClient)(caseId)(groupId)(...caseRoles)
+#### revokeGroupAccess(httpClient)(caseId)(groupId)
 
 Revoke access to a case from a group.
 
@@ -199,7 +199,7 @@ const client = httpClient('http://data-store:4452')(() => Promise.resolve('acces
 await revokeGroupAccess(client)('1234123412341238')('group-1');
 ```
 
-#### revokeUserAccess(httpClient)(caseId)(userId)(...caseRoles)
+#### revokeUserAccess(httpClient)(caseId)(userId)
 
 Revoke access to a case from a user.
 

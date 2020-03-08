@@ -21,7 +21,8 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "esm": "^3.2.25"
+    "esm": "^3.2.25",
+    "redis": "^3.0.2"
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.8.3",

@@ -17,6 +17,7 @@ npm i @quickcase/node-toolkit
 * [HTTP Client](#http-client)
 * [OAuth2](#oauth2)
 * [Search](#search)
+* [Redis Gateway](#redis-gateway)
 
 ### Case
 
@@ -639,4 +640,87 @@ const sort = s.sort(
 const page = s.page(1, 30);
 
 const response = await search(searchClient)('CaseType1')(query)(sort)(page);
+```
+
+### Redis Gateway
+
+#### publishBatchMessage(config)(options)
+
+Publish a batch message into Redis.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object| Required. Redis configuration object |
+| options | object | Required. Properties of the batch message, values should be string  |
+
+options object properties
+
+| Name | Type | Description |
+|------|------|-------------|
+| callerReference | String | Required. Redis configuration object |
+| jobs | String | Required. Array of jobItem object |
+| callbackEvent | String | Required. Object of callback event meta data will be used to notify caller when batch is completed |
+
+jobItem object properties
+
+| Name | Type | Description |
+|------|------|-------------|
+| caseType | String | Required. Redis configuration object |
+| events | Array | Required. Array of event objects to be triggered by batch process  {event : '#Case Event',type : [create|update]} |
+| payload | object | Payload of the case event which will be triggered |
+| index | Number | Index of the jobItem within the jobs |
+| failRetryCount | Number | fail the event after retry count attempt |
+
+callbackEvent object properties
+
+| Name | Type | Description |
+|------|------|-------------|
+| event | String | Required. Case event to be triggered when batch completed |
+| failedCollectionField | Object | Collection object to notify the failed jobs of the batch  |
+| completedCollectionField | Object | Collection object to notify the successful jobs of the batch [field,type,descriptionFields]|
+
+##### Returns
+
+`Promise` resolved when batch message successfully put into Redis.
+
+#### Example
+
+```javascript
+import {publishBatchMessage} from '@quickcase/node-toolkit';
+
+const config = {password: 'pass'};
+const jobItem = {
+    caseType: 'Application',
+    events: [{event: 'create', type: 'create',reference: null}],   
+    payload: '# Case Event Payload',
+    index: index,
+    failCount: 3
+};
+
+const options = {
+    callerReference: '#Case Reference',
+    jobs: JSON.stringify([jobItem]),
+    callbackEvent: JSON.stringify({
+        event: 'eRecruitUploadFinished',
+        failedCollectionField: {
+            field: 'failedApplications',
+            type: 'Text',
+            descriptionFields: ['eRecruitData'],
+        },
+        completedCollectionField: {
+            field: 'createdApplications',
+            type: 'CaseReference',
+            descriptionFields: ['cand_firstName', 'cand_lastName']
+        }
+    })
+};
+
+publishBatchMessage(config)(options)
+    .then(console.log)
+    .catch(console.error);
+/*
+["OK"]
+*/
 ```

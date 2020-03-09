@@ -27,8 +27,10 @@ jobs:
         with:
           node-version: '12.x'
 
+      - name: Install deps
+        run: npm ci
       - name: Audit dependencies
-        run: npm audit --audit-level=low
+        run: npm run audit:check
 
       - name: Notify slack fail
         if: failure()

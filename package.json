@@ -5,7 +5,9 @@
   "main": "index.js",
   "module": "main.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "audit:resolve": "resolve-audit",
+    "audit:check": "check-audit"
   },
   "repository": {
     "type": "git",
@@ -25,7 +27,8 @@
   },
   "devDependencies": {
     "@babel/plugin-transform-modules-commonjs": "^7.8.3",
-    "jest": "^25.1.0"
+    "jest": "^25.1.0",
+    "npm-audit-resolver": "^2.2.0"
   },
   "babel": {
     "env": {

@@ -115,6 +115,73 @@ isCaseIdentifier('1234123412341234') // > false - Incorrect check digit
 isCaseIdentifier('1234123412341238') // > true - Correct check digit
 ```
 
+#### idTo36(identifier)
+
+Encode case identifier to a base36 string representation.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| identifier | number or string | Required. Case Identifier|
+
+##### Returns
+
+`base36 string` representing case identifier.
+
+#### Example
+
+```javascript
+import {idTo36} from '@quickcase/node-toolkit';
+
+idTo36('1583178988495195') // > 0fl6udxa2qj
+```
+
+#### idFrom36(base36String)
+
+Decode case identifier from a base36 string representation.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| base36String | string | Required. base36 string representing Case Identifier|
+
+##### Returns
+
+`string` - case identifier converted from base36 string
+
+#### Example
+
+```javascript
+import {idFrom36} from '@quickcase/node-toolkit';
+
+idFrom36('0fl6udxa2qj') // > '1583178988495195'
+```
+
+#### isCaseIdentifier36(base36String)
+
+Validate if base36 string is a valid representation of a case identifier.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| base36String | string | Required. base36 string representing Case Identifier|
+
+##### Returns
+
+`true` - when base36 string is a valid case identifier; `false` otherwise
+
+#### Example
+
+```javascript
+import {isCaseIdentifier36} from '@quickcase/node-toolkit';
+
+isCaseIdentifier36('0fl6udxa2qj') // > true if the base36 string is a valid case identifier
+isCaseIdentifier36('xa2qj') // > false if the base36 string is not a valid case identifier
+```
+
 ### Case Access
 
 #### grantGroupAccess(httpClient)(caseId)(groupId)(...caseRoles)

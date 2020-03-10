@@ -1,3 +1,5 @@
+const RADIX_36 = 36;
+
 /**
  * Fetch a case from QuickCase Data Store by ID.
  *
@@ -65,3 +67,36 @@ const luhnDigit = (digit, index) => index % 2 === 0 ? digit : luhnDouble(digit);
 const luhnDouble = (digit) => luhnCap(digit * 2);
 
 const luhnCap = (digit) => digit > 9 ? digit - 9 : digit;
+
+/**
+ * Encode case identifier to base 36 string representation.
+ * Pads 0s to return a string of minimum 11 characters.
+ *
+ * @param id - number
+ * @returns {string} - base36 encoded string
+ */
+export const idTo36 = (id) => {
+  const base36 = Number(id).toString(RADIX_36);
+  let padding = '';
+  for (let i = base36.length; i < 11; i++) {
+    padding += '0';
+  }
+
+  return padding + base36;
+};
+
+/**
+ * Decode case identifier from base 36 string representation
+ *
+ * @param base36String - base36 encoded string
+ * @returns {string} - decoded case identifier
+ */
+export const idFrom36 = (base36String) => parseInt(base36String, RADIX_36).toString();
+
+/**
+ * Check if base 36 string representation is a valid case identifier
+ *
+ * @param base36String - base36 encoded string
+ * @returns {boolean} - true/false
+ */
+export const isCaseIdentifier36 = (base36String) => isCaseIdentifier(idFrom36(base36String));

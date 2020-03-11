@@ -5,7 +5,7 @@ const util = require("util");
 
 describe('publishBatchMessage', () => {
 
-  const BATCH_MESSAGE = {jobs: {}, callerReference: 'case-ref', callbackEvent: {}};
+  const BATCH_MESSAGE = {jobs: {}, callerReference: 'case-ref', notifyUrl: {}};
   const PUBLISH_RESPONSE = ['OK'];
   let IS_BATCH_EXIST = 0;
   const redisClient = {
@@ -69,14 +69,37 @@ describe('publishBatchMessage', () => {
       })
   });
 
-  test('should check mandatory fields', async (done) => {
-    let errorMessage = 'Mandatory fields missing.';
-    try {
-      publishBatchMessage({})();
-    } catch (e) {
-      expect(e.message).toEqual(errorMessage);
-      done()
-    }
+  describe('Mandatory fields check', () => {
+    test('should check options object', async (done) => {
+
+      publishBatchMessage({})()
+        .catch(err => {
+          expect(err.message).toEqual('Options is mandatory.');
+          done();
+        });
+    });
+    test('should check caller reference', async (done) => {
+      publishBatchMessage({})({jobs: {}, notifyUrl: ''})
+        .catch(err => {
+          expect(err.message).toEqual('Caller Reference is mandatory.');
+          done();
+        });
+    });
+    test('should check jobs', async (done) => {
+      publishBatchMessage({})({callerReference: {}, notifyUrl: ''})
+        .catch(err => {
+          expect(err.message).toEqual('Jobs is mandatory.');
+          done();
+        });
+
+    });
+    test('should check notify url', async (done) => {
+      publishBatchMessage({})({callerReference: {}, jobs: {}})
+        .catch(err => {
+          expect(err.message).toEqual('Notify Url is mandatory.');
+          done();
+        });
+    });
   });
 
 });

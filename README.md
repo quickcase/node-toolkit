@@ -655,13 +655,21 @@ Publish a batch message into Redis.
 | config | object| Required. Redis configuration object |
 | options | object | Required. Properties of the batch message, values should be string  |
 
+config object properties
+Configuration properties for the Redis.
+| Name | Type | Description |
+|------|------|-------------|
+| host | String | Redis server host (ex : 127.0.0.1) |
+| port | String | Redis server port (6379) |
+| password | String | Redis password |
+
 options object properties
 
 | Name | Type | Description |
 |------|------|-------------|
 | callerReference | String | Required. Redis configuration object |
 | jobs | String | Required. Array of jobItem object |
-| callbackEvent | String | Required. Object of callback event meta data will be used to notify caller when batch is completed |
+| notifyUrl | String | Required. Callback url to notify caller when batch is completed |
 
 jobItem object properties
 
@@ -673,14 +681,6 @@ jobItem object properties
 | index | Number | Index of the jobItem within the jobs |
 | failRetryCount | Number | fail the event after retry count attempt |
 
-callbackEvent object properties
-
-| Name | Type | Description |
-|------|------|-------------|
-| event | String | Required. Case event to be triggered when batch completed |
-| failedCollectionField | Object | Collection object to notify the failed jobs of the batch  |
-| completedCollectionField | Object | Collection object to notify the successful jobs of the batch [field,type,descriptionFields]|
-
 ##### Returns
 
 `Promise` resolved when batch message successfully put into Redis.
@@ -690,7 +690,7 @@ callbackEvent object properties
 ```javascript
 import {publishBatchMessage} from '@quickcase/node-toolkit';
 
-const config = {password: 'pass'};
+const config = {host: 'redisHost', port: 'redisPort', password: 'pass'};
 const jobItem = {
     caseType: 'Application',
     events: [{event: 'create', type: 'create',reference: null}],   
@@ -702,19 +702,7 @@ const jobItem = {
 const options = {
     callerReference: '#Case Reference',
     jobs: JSON.stringify([jobItem]),
-    callbackEvent: JSON.stringify({
-        event: 'eRecruitUploadFinished',
-        failedCollectionField: {
-            field: 'failedApplications',
-            type: 'Text',
-            descriptionFields: ['eRecruitData'],
-        },
-        completedCollectionField: {
-            field: 'createdApplications',
-            type: 'CaseReference',
-            descriptionFields: ['cand_firstName', 'cand_lastName']
-        }
-    })
+    notifyUrl: '#webhooks-notify-url'
 };
 
 publishBatchMessage(config)(options)

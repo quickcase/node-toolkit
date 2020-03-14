@@ -11,6 +11,7 @@ npm i @quickcase/node-toolkit
 
 ## Toolkit API
 
+* [Cache](#cache)
 * [Case](#case)
 * [Case Access](#case-access)
 * [Field](#field)
@@ -18,6 +19,37 @@ npm i @quickcase/node-toolkit
 * [OAuth2](#oauth2)
 * [Search](#search)
 * [Redis Gateway](#redis-gateway)
+
+### Cache
+
+#### useCache(config)
+
+Creates a new cache instance.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object| Optional. Caching configuration |
+
+`config`:
+* `ttlMs`: Number. Time-to-live for cache in milliseconds, defaults to 30000 (30s)
+
+##### Returns
+
+`Array` with getter and setter functions for cache.
+
+#### Example
+
+```javascript
+import {useCache} from '@quickcase/node-toolkit';
+
+const [getValue, setValue] = useCache({ttlMs: 5 * 1000});
+
+setValue('key')('someValue');
+
+const value = getValue('key'); // value = 'someValue'
+```
 
 ### Case
 

@@ -1,3 +1,4 @@
+export * from './modules/cache';
 export * from './modules/case';
 export * from './modules/case-access';
 export * from './modules/definition';

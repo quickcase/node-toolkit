@@ -556,6 +556,40 @@ const tokenProvider = clientAccessTokenProvider({
 const accessToken = await tokenProvider();
 ```
 
+#### defaultUserInfoRetriever(config)(accessToken)
+
+Retrieve the user claims from an OIDC provider `/userInfo` endpoint.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Configuration (see below) |
+| accessToken | string | Required. Access token for which user info should be retrieved |
+
+`config`:
+* `userInfoUri`: Required. URI of OIDC provider's `/userInfo` endpoint
+
+##### Returns
+
+`Promise` resolved with the user claims.
+
+##### Example
+
+```javascript
+import {defaultUserInfoRetriever} from '@quickcase/node-toolkit';
+
+const config = {jwksUri: 'http://idam/oidc/userInfo'};
+const userClaims = await defaultUserInfoRetriever(config)('accessToken123');
+/*
+userClaims:
+{
+  "sub": "...",
+  ...
+}
+*/
+```
+
 #### exchangeOAuth2Code(config)(redirectUri)(code)
 
 Provided a valid OAuth2 code, exchange it for a full set of tokens in the context of an OIDC/OAuth2 authorization code grant.

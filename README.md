@@ -405,6 +405,37 @@ Configured HTTP client instance.
 
 ### OAuth2
 
+#### AccessTokenSupplier
+
+##### cookieAccessTokenSupplier(cookie = 'access_token')(req)
+
+Extract an access token from a cookie on an ExpressJS request.
+
+###### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| cookie | string | Optional. Name of the cookie, defaults to `access_token` |
+
+###### Returns
+
+`string` containing the access token; `undefined` if not found.
+
+##### headerAccessTokenSupplier(header = 'Authorization')(req)
+
+Extract an access token from a header on an ExpressJS request.
+The header value must comply to pattern `Bearer <accessToken>`.
+
+###### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| header | string | Optional. Name of the header, defaults to `Authorization` |
+
+###### Returns
+
+`string` containing the access token; `undefined` if not found.
+
 #### clientAccessTokenProvider(config)()
 
 Provides a valid OAuth2 client access token as per OAuth2's client credentials flow. This is used for Service-to-Service authentication.
@@ -613,6 +644,55 @@ payload:
   ...
 }
 */
+```
+
+#### oauth2Guard(config)(req, res, next)
+
+ExpressJS middleware mandating the presence of a valid access token and extracting user claims and granted authorities.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Configuration (see below) |
+
+`config`:
+* `accessTokenSupplier`: Optional. Function extracting the access token from an ExpressJS request, defaults to extraction from `Authorization` header
+* `jwtVerifier`: Required. Function verifying the JWT access token
+* `onError`: Optional. Function handling errors
+* `rolesExtractor`: Optional. Function extracting roles from user claims
+* `scopesExtractor`: Optional. Function extracting scopes from access token claims
+* `userInfoRetriever`: Required. Function retrieving the user claims from the OIDC provider
+
+##### Example
+
+```javascript
+import express from 'express';
+import {
+  cachedJwtKeySupplier,
+  defaultJwtKeySupplier,
+  defaultJwtVerifier,
+  defaultUserInfoRetriever,
+  oauth2Guard,
+} from '@quickcase/node-toolkit';
+
+const jwtKeySupplier = cachedJwtKeySupplier()(defaultJwtKeySupplier({jwksUri: 'https://...'}));
+
+const app = express();
+
+app.use(oauth2Guard({
+  jwtVerifier: defaultJwtVerifier(jwtKeySupplier),
+  userInfoRetriever: defaultUserInfoRetriever({userInfoUri: 'https://...'}),
+}));
+
+app.use((req, res, next) => {
+  // req.grantedAuthorities = ['caseworker', 'caseworker-jid'];
+  // req.userClaims = {
+  //   sub: '',
+  //   ...
+  // };
+  next();
+});
 ```
 
 #### refreshOAuth2Tokens(config)(refreshToken)

@@ -24,6 +24,8 @@
   "dependencies": {
     "axios": "^0.19.2",
     "esm": "^3.2.25",
+    "jsonwebtoken": "^8.5.1",
+    "jwks-rsa": "^1.7.0",
     "redis": "^3.0.2"
   },
   "devDependencies": {

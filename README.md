@@ -520,6 +520,101 @@ tokens:
 */
 ```
 
+#### JwtKeySupplier
+
+##### cachedJwtKeySupplier(config)(jwtKeySupplier)(jwtHeader)
+
+Decorates a `jwtKeySupplier` to add caching per `kid`.
+
+###### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Optional. Cache configuration, see `Cache: useCache(config)` |
+| jwtKeySupplier | JwtKeySupplier | Required. Decorated instance |
+| jwtHeader | object | Required. Header of JWT token with `kid` property |
+
+###### Returns
+
+`Promise` resolved with signing key for given `jwtHeader`.
+
+###### Example
+
+```javascript
+import {cachedJwtKeySupplier} from '@quickcase/node-toolkit';
+
+const config = {
+  ttlMs: 5 * 1000,
+};
+const jwtKeySupplier = (jwtHeader) => Promise.resolve('signingKey');
+
+const signingKey = await cachedJwtKeySupplier(config)(jwtKeySupplier)({kid: 'key123'});
+// signingKey: '...'
+```
+
+##### defaultJwtKeySupplier(config)(jwtHeader)
+
+Use `jwks-rsa` to retrieve signing key from a JWKS endpoint.
+
+###### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Object with `jwksUri` property |
+| jwtHeader | object | Required. Header of JWT token with `kid` property |
+
+###### Returns
+
+`Promise` resolved with signing key for given `jwtHeader`.
+
+###### Example
+
+```javascript
+import {defaultJwtKeySupplier} from '@quickcase/node-toolkit';
+
+const config = {
+  jwksUri: 'https://idam/oidc/.well-known/jwks.json',
+};
+
+const signingKey = await defaultJwtKeySupplier(config)({kid: 'key123'});
+// signingKey: '...'
+```
+
+#### JwtVerifier
+
+##### defaultJwtVerifier(jwtKeySupplier)(jwtToken)
+
+Use `jsonwebtoken` to verify JWT token and extract payload.
+
+###### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| jwtKeySupplier | JwtKeySupplier | Required. Instance of a JWT key supplier to verify signature |
+| jwtToken | string | Required. JWT token to verify |
+
+###### Returns
+
+`Promise` resolved with payload of `jwtToken` when token verified (signature and expiry). `Promise` rejected if `jwtToken` couldn't be verified.
+
+###### Example
+
+```javascript
+import {defaultJwtVerifier} from '@quickcase/node-toolkit';
+
+const jwtKeySupplier = (jwtHeader) => Promise.resolve('signingKey');
+
+const payload = await defaultJwtVerifier(jwtKeySupplier)('eyJhbGciOiJIUzI1NiIsInR...UuqlnuQ');
+/*
+payload:
+{
+  "sub": "...",
+  "exp": "...",
+  ...
+}
+*/
+```
+
 #### refreshOAuth2Tokens(config)(refreshToken)
 
 Provided a valid OAuth2 refresh token, exchange it for a full set of tokens.

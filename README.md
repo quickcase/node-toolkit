@@ -298,6 +298,40 @@ await revokeUserAccess(client)('1234123412341238')('user-1');
 
 ### Definition
 
+#### fetchCaseType(httpClient)(caseTypeId)()
+
+Fetch a case type definition from QuickCase Definition Store.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object | Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseTypeId | string | Required. ID of the case type definition to fetch |
+
+##### Returns
+
+`Promise` resolved with case type definition.
+
+#### Example
+
+```javascript
+import {fetchCaseType, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to get a document
+const client = httpClient('http://definition-store:4451')(() => Promise.resolve('access-token'));
+
+const caseType = await fetchCaseType(client)('caseType1')();
+/*
+caseType:
+{
+  acls: [],
+  case_fields: [],
+  ...
+}  
+*/
+```
+
 ### Document
 
 #### createDocument(httpclient)(metadata)

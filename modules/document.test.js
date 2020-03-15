@@ -1,4 +1,4 @@
-import {createDocument} from './document';
+import {createDocument, getDocument} from './document';
 
 describe('createDocument', () => {
   test('should create a new document upload URL', async () => {
@@ -25,5 +25,24 @@ describe('createDocument', () => {
     };
     const docUpload = await createDocument(httpStub)(metadata);
     expect(docUpload).toEqual(resData);
+  });
+});
+
+describe('getDocument', () => {
+  test('should create a new document download URL', async () => {
+    const docId = '123-123-123';
+    const resData = {
+      id: docId,
+      download_url: 'http://download-url',
+    };
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/documents/${docId}`);
+        return Promise.resolve({data: resData});
+      },
+    };
+
+    const docDownload = await getDocument(httpStub)(docId);
+    expect(docDownload).toEqual(resData);
   });
 });

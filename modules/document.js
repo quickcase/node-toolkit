@@ -17,3 +17,16 @@ export const createDocument = (http) => async (metadata) => {
   const res = await http.post(url, metadata);
   return res.data;
 };
+
+/**
+ * Get a document download in QuickCase Document Store.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string} docId Identifier of the document to download
+ * @return {Promise} Promise resolved with the new document download
+ */
+export const getDocument = (http) => async (docId) => {
+  const url = `/documents/${docId}`;
+  const res = await http.get(url);
+  return res.data;
+};

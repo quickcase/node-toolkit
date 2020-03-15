@@ -297,6 +297,49 @@ await revokeUserAccess(client)('1234123412341238')('user-1');
 
 ### Document
 
+#### createDocument(httpclient)(metadata)
+
+Creates a new document upload URL.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object | Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| metadata | object | Required. Document metadata, will be used for access control. See below |
+
+`metadata`:
+* `organisation`: String. Organisation ID
+* `caseType`: String. Case type ID
+* `field`: String. ID of a root field, or path to a nested field (eg. `parent.field1`)
+
+##### Returns
+
+`Promise` resolved with document upload.
+
+#### Example
+
+```javascript
+import {createDocument, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to create a document
+const client = httpClient('http://document-store:3333')(() => Promise.resolve('access-token'));
+
+const metadata = {
+  organisation: 'org1',
+  caseType: 'caseType1',
+  field: 'field1',
+};
+const docUpload = await createDocument(client)(metadata);
+/*
+docUpload:
+{
+  id: '123-123-123',
+  upload_url: 'http://upload-url',
+}  
+*/
+```
+
 ### Field
 
 #### isNo(value)

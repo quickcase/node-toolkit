@@ -340,6 +340,39 @@ docUpload:
 */
 ```
 
+#### getDocument(httpclient)(docId)
+
+Get a document download URL.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object | Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| docId | string | Required. ID of the document to download |
+
+##### Returns
+
+`Promise` resolved with document download.
+
+#### Example
+
+```javascript
+import {getDocument, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to get a document
+const client = httpClient('http://document-store:3333')(() => Promise.resolve('access-token'));
+
+const docDownload = await getDocument(client)('123-123-123');
+/*
+docDownload:
+{
+  id: '123-123-123',
+  download_url: 'http://download-url',
+}  
+*/
+```
+
 ### Field
 
 #### isNo(value)

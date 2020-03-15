@@ -13,6 +13,7 @@ npm i @quickcase/node-toolkit
 
 * [Case](#case)
 * [Case Access](#case-access)
+* [Definition](#definition)
 * [Document](#document)
 * [Field](#field)
 * [HTTP Client](#http-client)
@@ -294,6 +295,8 @@ const client = httpClient('http://data-store:4452')(() => Promise.resolve('acces
 
 await revokeUserAccess(client)('1234123412341238')('user-1');
 ```
+
+### Definition
 
 ### Document
 

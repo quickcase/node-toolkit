@@ -38,19 +38,19 @@ export const oauth2Guard = (config) => {
   config = withDefaults(config);
 
   return async (req, res, next) => {
-    const accessToken = config.accessTokenSupplier(req);
+    req.accessToken = config.accessTokenSupplier(req);
 
-    if (!accessToken)
+    if (!req.accessToken)
       return config.onError({req, res, next, error: 'Access token missing'});
 
     try {
-      const claims = await config.jwtVerifier(accessToken);
+      const claims = await config.jwtVerifier(req.accessToken);
 
       const scopes = config.scopesExtractor(claims);
       req.grantedAuthorities = scopes;
 
       if (scopes.includes('profile')) {
-        req.userClaims = await config.userInfoRetriever(accessToken);
+        req.userClaims = await config.userInfoRetriever(req.accessToken);
         req.grantedAuthorities = config.rolesExtractor(req.userClaims);
       }
 

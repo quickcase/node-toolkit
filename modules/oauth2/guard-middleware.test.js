@@ -112,4 +112,16 @@ describe('oauth2Guard', () => {
       jwtVerifier: () => Promise.resolve({'scope': 'data-store/scope1 data-store/scope2'}),
     })(req, res, next);
   });
+
+  test('should populate access token', (done) => {
+    const req = newReq({authorization: 'Bearer validJwtToken'});
+    const res = {};
+    const next = () => {
+      expect(req.accessToken).toEqual('validJwtToken');
+      done();
+    };
+    oauth2Guard({
+      jwtVerifier: () => Promise.resolve({'scope': 'test'}),
+    })(req, res, next);
+  });
 });

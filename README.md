@@ -16,6 +16,7 @@ npm i @quickcase/node-toolkit
 * [Case Access](#case-access)
 * [Definition](#definition)
 * [Document](#document)
+* [Express](#express)
 * [Field](#field)
 * [HTTP Client](#http-client)
 * [OAuth2](#oauth2)
@@ -441,6 +442,10 @@ docDownload:
 }  
 */
 ```
+
+### Express
+
+Utilities for [ExpressJS](https://expressjs.com/) v4.x.x.
 
 ### Field
 

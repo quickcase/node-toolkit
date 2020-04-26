@@ -802,6 +802,7 @@ app.use(oauth2Guard({
 }));
 
 app.use((req, res, next) => {
+  // req.accessToken = 'ey123...';
   // req.grantedAuthorities = ['caseworker', 'caseworker-jid'];
   // req.userClaims = {
   //   sub: '',

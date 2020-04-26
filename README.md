@@ -447,6 +447,41 @@ docDownload:
 
 Utilities for [ExpressJS](https://expressjs.com/) v4.x.x.
 
+#### middlewareFactory(dependencySuppliers)(middlewareSupplier)(req, res, next)
+
+Decorator for an Express middleware which dynamically instantiates request-based dependencies and underlying middleware upon processing of a request.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| dependencySuppliers | object | Required. Map of named dependency supplier functions which take the request object as an input |
+| middlewareSupplier | function | Function that will be passed the initialised dependencies and return an initialised Express middleware. |
+
+##### Returns
+
+ExpressJS middleware function.
+
+##### Example
+
+```js
+import {middlewareFactory} from '@quickcase/node-toolkit';
+import express from 'express';
+
+const router = express.Router();
+
+const dependencySuppliers = {
+  tokenProvider: (req) => () => Promise.resolve(req.accessToken),
+  service: (req) => {...},
+};
+
+const middlewareSupplier = ({tokenProvider, service}) => (req, res) => {
+  // use initialised `tokenProvider` and `service`...
+};
+
+router.get('/', middlewareFactory(dependencySuppliers)(middlewareSupplier));
+```
+
 ### Field
 
 #### isNo(value)

@@ -381,6 +381,7 @@ Creates a new document upload URL.
 `metadata`:
 * `organisation`: String. Organisation ID
 * `caseType`: String. Case type ID
+* `case`: String. Case 16-digit reference
 * `field`: String. ID of a root field, or path to a nested field (eg. `parent.field1`)
 
 ##### Returns

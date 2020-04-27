@@ -2,7 +2,8 @@
  * @typedef {object} DocumentMetadata
  * @property {string} organisation Organisation ID
  * @property {string} caseType Case Type ID
- * @property {string} field Field path
+ * @property {string} case Case 16-digit reference
+ * @property {string} field Field ID or field path for Document fields within Collection or Complex types
  */
 
 /**

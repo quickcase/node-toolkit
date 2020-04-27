@@ -1,6 +1,6 @@
 {
   "name": "@quickcase/node-toolkit",
-  "version": "0.6.1",
+  "version": "0.7.0",
   "description": "NodeJS toolkit for QuickCase",
   "main": "index.js",
   "module": "main.js",

@@ -15,7 +15,7 @@
  */
 export const createDocument = (http) => async (metadata) => {
   const url = '/documents';
-  const res = await http.post(url, metadata);
+  const res = await http.post(url, {metadata});
   return res.data;
 };
 

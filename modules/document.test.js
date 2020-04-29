@@ -10,9 +10,12 @@ describe('createDocument', () => {
       post: (url, body) => {
         expect(url).toEqual('/documents');
         expect(body).toEqual({
-          organisation: 'org1',
-          caseType: 'caseType1',
-          field: 'field1',
+          metadata: {
+            organisation: 'org1',
+            caseType: 'caseType1',
+            case: '1234123412341238',
+            field: 'field1',
+          }
         });
         return Promise.resolve({data: resData});
       },
@@ -21,6 +24,7 @@ describe('createDocument', () => {
     const metadata = {
       organisation: 'org1',
       caseType: 'caseType1',
+      case: '1234123412341238',
       field: 'field1',
     };
     const docUpload = await createDocument(httpStub)(metadata);

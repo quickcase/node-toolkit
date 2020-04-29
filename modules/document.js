@@ -1,5 +1,6 @@
 /**
  * @typedef {object} DocumentMetadata
+ * @property {string} filename Name of the file, to be used as custom name for downloads
  * @property {string} organisation Organisation ID
  * @property {string} caseType Case Type ID
  * @property {string} case Case 16-digit reference

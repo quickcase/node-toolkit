@@ -11,6 +11,7 @@ describe('createDocument', () => {
         expect(url).toEqual('/documents');
         expect(body).toEqual({
           metadata: {
+            filename: 'someFile.pdf',
             organisation: 'org1',
             caseType: 'caseType1',
             case: '1234123412341238',
@@ -22,6 +23,7 @@ describe('createDocument', () => {
     };
 
     const metadata = {
+      filename: 'someFile.pdf',
       organisation: 'org1',
       caseType: 'caseType1',
       case: '1234123412341238',

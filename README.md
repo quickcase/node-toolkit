@@ -379,6 +379,7 @@ Creates a new document upload URL.
 | metadata | object | Required. Document metadata, will be used for access control. See below |
 
 `metadata`:
+* `filename`: String. Custom name for the file, used to name downloads
 * `organisation`: String. Organisation ID
 * `caseType`: String. Case type ID
 * `case`: String. Case 16-digit reference
@@ -397,8 +398,10 @@ import {createDocument, httpClient} from '@quickcase/node-toolkit';
 const client = httpClient('http://document-store:3333')(() => Promise.resolve('access-token'));
 
 const metadata = {
+  filename: 'someFile.pdf',
   organisation: 'org1',
   caseType: 'caseType1',
+  case: '1234123412341238',
   field: 'field1',
 };
 const docUpload = await createDocument(client)(metadata);

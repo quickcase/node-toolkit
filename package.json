@@ -2,10 +2,14 @@
   "name": "@quickcase/node-toolkit",
   "version": "0.7.1",
   "description": "NodeJS toolkit for QuickCase",
-  "main": "index.js",
-  "module": "main.js",
+  "main": "lib/index.js",
+  "files": [
+    "lib/"
+  ],
   "scripts": {
-    "test": "jest",
+    "prepublish": "npm run build",
+    "build": "babel src -d lib",
+    "test": "jest src",
     "audit:resolve": "resolve-audit",
     "audit:check": "check-audit"
   },
@@ -23,13 +27,15 @@
   },
   "dependencies": {
     "axios": "^0.19.2",
-    "esm": "^3.2.25",
     "jsonwebtoken": "^8.5.1",
     "jwks-rsa": "^1.8.0",
     "redis": "^3.0.2"
   },
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
+    "@babel/core": "^7.9.6",
     "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@babel/preset-env": "^7.9.6",
     "jest": "^25.5.4",
     "npm-audit-resolver": "^2.2.0"
   },
@@ -40,7 +46,17 @@
           "@babel/plugin-transform-modules-commonjs"
         ]
       }
-    }
+    },
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": true
+          }
+        }
+      ]
+    ]
   },
   "jest": {
     "coverageReporters": [

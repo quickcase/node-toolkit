@@ -18,13 +18,11 @@
     "url": "git://github.com/quickcase/node-toolkit.git"
   },
   "author": "QuickCase",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/quickcase/node-toolkit/issues"
   },
   "homepage": "https://github.com/quickcase/node-toolkit#readme",
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "dependencies": {
     "axios": "^0.19.2",
     "jsonwebtoken": "^8.5.1",

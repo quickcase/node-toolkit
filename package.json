@@ -7,7 +7,7 @@
     "lib/"
   ],
   "scripts": {
-    "prepublish": "npm run build",
+    "prepare": "npm run build",
     "build": "babel src -d lib",
     "test": "jest src",
     "audit:resolve": "resolve-audit",

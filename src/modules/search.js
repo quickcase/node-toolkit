@@ -38,6 +38,10 @@ const and = (...criteria) => ({
   and: criteria,
 });
 
+const not = (...criteria) => ({
+  not: criteria,
+});
+
 const or = (...criteria) => ({
   or: criteria,
 });
@@ -73,6 +77,7 @@ const collectionItem = (field, value) => ({
 });
 
 export const searchDsl = Object.freeze({
+  not,
   and,
   equals,
   equalsIgnoreCase,

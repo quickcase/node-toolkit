@@ -135,6 +135,16 @@ describe('searchDsl', () => {
     });
   });
 
+  test('should return `not` matcher', () => {
+    const not = dsl.not({equals: 'equals1'}, {equals: 'equals2'});
+    expect(not).toEqual({
+      not: [
+        {equals: 'equals1'},
+        {equals: 'equals2'}
+      ]
+    });
+  });
+
   test('should return `and` matcher', () => {
     const and = dsl.and({equals: 'equals1'}, {equals: 'equals2'});
     expect(and).toEqual({

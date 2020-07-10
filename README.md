@@ -940,6 +940,10 @@ A domain-specific language to help build search queries.
 
 Build the top-level `query` object by composing one or many criteria.
 
+##### not(...criteria)
+
+Combine multiple criteria with the `NOT` operator.
+
 ##### and(...criteria)
 
 Combine multiple criteria with the `AND` operator.

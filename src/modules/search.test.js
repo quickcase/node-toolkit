@@ -136,12 +136,9 @@ describe('searchDsl', () => {
   });
 
   test('should return `not` matcher', () => {
-    const not = dsl.not({equals: 'equals1'}, {equals: 'equals2'});
+    const not = dsl.not({equals: 'equals1'});
     expect(not).toEqual({
-      not: [
-        {equals: 'equals1'},
-        {equals: 'equals2'}
-      ]
+      not: {equals: 'equals1'}
     });
   });
 

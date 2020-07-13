@@ -38,7 +38,7 @@ const and = (...criteria) => ({
   and: criteria,
 });
 
-const not = (...criteria) => ({
+const not = (criteria) => ({
   not: criteria,
 });
 

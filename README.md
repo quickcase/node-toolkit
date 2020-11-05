@@ -541,7 +541,7 @@ isYes('No'); // false
 
 ### HTTP Client
 
-#### httpClient(baseUrl)(accessTokenProvider)
+#### httpClient(baseUrl, axiosInstance = axios)(accessTokenProvider)
 
 Create a configured instance of an HTTP client, based on [Axios](https://github.com/axios/axios).
 
@@ -549,7 +549,8 @@ Create a configured instance of an HTTP client, based on [Axios](https://github.
 
 | Name | Type | Description |
 |------|------|-------------|
-| baseUrl | string| Required. Base URL to use for HTTP requests |
+| baseUrl | string | Required. Base URL to use for HTTP requests |
+| axiosInstance | Axios | Optional. Custom instance of Axios, created by `axios.create()`. Defaults to global `axios` instance. |
 | accessTokenProvider | function | Required. Function returning a `Promise` resolved with a valid access token |
 
 ##### Returns

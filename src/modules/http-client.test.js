@@ -38,4 +38,24 @@ describe('httpClient', () => {
     expect(resp).toEqual(expectedResp);
     expect(axios.put).toHaveBeenCalledWith('http://data-store:4452/path/to/resource', body,{headers: {Authorization: 'Bearer access-token-123'}});
   });
+
+  test('should accept custom axios instance', async () => {
+    const customAxios = {
+      get: jest.fn().mockResolvedValue({status: 200}),
+      post: jest.fn().mockResolvedValue({status: 201}),
+      put: jest.fn().mockResolvedValue({status: 202}),
+    };
+
+    const customClient = httpClient(baseUrl, customAxios)(tokenProviderStub);
+
+    const [getRes, postRes, putRes] = await Promise.all([
+      customClient.get('/path/to/get'),
+      customClient.post('/path/to/post'),
+      customClient.put('/path/to/put'),
+    ]);
+
+    expect(getRes).toEqual({status: 200});
+    expect(postRes).toEqual({status: 201});
+    expect(putRes).toEqual({status: 202});
+  });
 });

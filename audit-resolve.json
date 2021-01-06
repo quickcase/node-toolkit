@@ -1,10 +1,1 @@
-{
-  "decisions": {
-    "1500|npm-audit-resolver>audit-resolve-core>yargs-parser": {
-      "decision": "ignore",
-      "madeAt": 1597851398510
-    }
-  },
-  "rules": {},
-  "version": 1
-}
+{}

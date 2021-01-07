@@ -262,6 +262,50 @@ isCaseIdentifier36('0fl6udxa2qj') // > true if the base36 string is a valid case
 isCaseIdentifier36('xa2qj') // > false if the base36 string is not a valid case identifier
 ```
 
+#### updateCase(httpClient)(caseTypeId)(eventId)(payload)
+
+Update/progress an existing case in QuickCase Data Store.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseId | string | Required. 16-digit unique case identifier |
+| eventId | string | Required. Unique event trigger identifier to use for update |
+| payload | description | Optional. Case data and event description |
+
+`payload`:
+* `data`: Optional object formed of key/value pairs of case fields to add/edit the case
+* `summary`: Optional short sentence justifying the case update
+* `description`: Optional longer explanation of the case update
+
+##### Returns
+
+`Promise` resolved with the updated case.
+
+#### Example
+
+```javascript
+import {updateCase, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to create a case
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+const aCase = await updateCase(client)('aCaseType')('anEvent')({
+  data: {field1: 'value1'},
+  summary: 'Updated case',
+});
+/*
+{
+  id: '1234123412341238',
+  state: 'Updated',
+  data: {field1: 'value1'},
+  ...
+}
+*/
+```
+
 ### Case Access
 
 #### grantGroupAccess(httpClient)(caseId)(groupId)(...caseRoles)

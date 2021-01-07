@@ -57,6 +57,50 @@ const value = getValue('key'); // value = 'someValue'
 
 ### Case
 
+#### createCase(httpClient)(caseTypeId)(eventId)(payload)
+
+Create a new case in QuickCase Data Store.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| httpClient | object| Required. A configured, ready-to-use HTTP client from `@quickcase/node-toolkit` |
+| caseTypeId | string | Required. Unique case type identifier |
+| eventId | string | Required. Unique event trigger identifier to use for creation |
+| payload | description | Optional. Case data and event description |
+
+`payload`:
+* `data`: Optional object formed of key/value pairs of case fields for the new case
+* `summary`: Optional short sentence justifying the case creation
+* `description`: Optional longer explanation of the case creation
+
+##### Returns
+
+`Promise` resolved with the newly created case.
+
+#### Example
+
+```javascript
+import {createCase, httpClient} from '@quickcase/node-toolkit';
+
+// A configured `httpClient` is required to create a case
+const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
+
+const aCase = await createCase(client)('aCaseType')('anEvent')({
+  data: {field1: 'value1'},
+  summary: 'New case',
+});
+/*
+{
+  id: '1234123412341238',
+  state: 'Created',
+  data: {field1: 'value1'},
+  ...
+}
+*/
+```
+
 #### fetchCase(httpClient)(caseId)()
 
 Fetch a case from QuickCase Data Store.

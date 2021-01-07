@@ -3,9 +3,9 @@ const RADIX_36 = 36;
 /**
  * @typedef CreatePayload
  * @type {object}
- * @property {object} data optional key value pairs of case fields for the new case
- * @property {string} summary optional motivation of the case creation
- * @property {string} age optional longer explanation of the case creation
+ * @property {object} data Optional key value pairs of case fields for the new case
+ * @property {string} summary Optional motivation of the case creation
+ * @property {string} description Optional longer explanation of the case creation
  */
 
 /**
@@ -15,7 +15,7 @@ const RADIX_36 = 36;
  * @param {string} caseTypeId Unique case type identifier
  * @param {string} eventId Unique event trigger identifier to use for creation
  * @param {CreatePayload} payload Object formed of optional `data`, `summary` and `description`
- * @return {Promise} Promise resolved with the case for the given identifier.
+ * @return {Promise} Promise resolved with the created case
  */
 export const createCase = (http) => (caseTypeId) => (eventId) => async (payload = {}) => {
   const {data: {token}} = await http.get(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
@@ -131,3 +131,34 @@ export const idFrom36 = (base36String) => parseInt(base36String, RADIX_36).toStr
  * @returns {boolean} - true/false
  */
 export const isCaseIdentifier36 = (base36String) => isCaseIdentifier(idFrom36(base36String));
+
+/**
+ * @typedef UpdatePayload
+ * @type {object}
+ * @property {object} data Optional key value pairs of case fields to add/edit the case
+ * @property {string} summary Optional motivation of the case update
+ * @property {string} description Optional longer explanation of the case update
+ */
+
+/**
+ * Update/progress an existing case in QuickCase Data Store.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string} caseId 16-digit unique case identifier
+ * @param {string} eventId Unique event trigger identifier to use for update
+ * @param {UpdatePayload} payload Object formed of optional `data`, `summary` and `description`
+ * @return {Promise} Promise resolved with the updated case
+ */
+export const updateCase = (http) => (caseId) => (eventId) => async (payload = {}) => {
+  const {data: {token}} = await http.get(`/cases/${caseId}/event-triggers/${eventId}`);
+  const updateRes = await http.post(`/cases/${caseId}/events`, {
+    data: payload.data,
+    event: {
+      id: eventId,
+      summary: payload.summary,
+      description: payload.description,
+    },
+    event_token: token,
+  });
+  return updateRes.data;
+};

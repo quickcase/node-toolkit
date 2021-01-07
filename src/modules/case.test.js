@@ -6,6 +6,7 @@ import {
   idTo36,
   isCaseIdentifier,
   isCaseIdentifier36,
+  updateCase,
 } from './case';
 
 describe('fetchCase', () => {
@@ -205,6 +206,85 @@ describe('createCase', () => {
     expect(createdCase).toEqual({
       id: caseId,
       data: {},
+    });
+  });
+});
+
+describe('updateCase', () => {
+  test('should update a case for given case ID and event', async () => {
+    const caseId = '1234123412341238';
+    const eventId = 'anEvent';
+    const token = 'trigger-token';
+    const payload = {
+      data: {field1: 'value1'},
+      summary: 'A summary',
+      description: 'A description',
+    };
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/cases/${caseId}/event-triggers/${eventId}`);
+        return Promise.resolve({data: {token}});
+      },
+      post: (url, body) => {
+        expect(url).toEqual(`/cases/${caseId}/events`);
+        expect(body).toEqual({
+          data: payload.data,
+          event: {
+            id: eventId,
+            summary: payload.summary,
+            description: payload.description,
+          },
+          event_token: token,
+        });
+        return Promise.resolve({data: {
+          id: caseId,
+          data: body.data,
+        }});
+      },
+    };
+
+    const updatedCase = await updateCase(httpStub)(caseId)(eventId)(payload);
+    expect(updatedCase).toEqual({
+      id: caseId,
+      data: payload.data,
+    });
+  });
+
+  test('should update a case for given case ID and event without payload', async () => {
+    const caseId = '1234123412341238';
+    const eventId = 'anEvent';
+    const token = 'trigger-token';
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/cases/${caseId}/event-triggers/${eventId}`);
+        return Promise.resolve({data: {token}});
+      },
+      post: (url, body) => {
+        expect(url).toEqual(`/cases/${caseId}/events`);
+        expect(body).toEqual({
+          data: undefined,
+          event: {
+            id: eventId,
+            summary: undefined,
+            description: undefined,
+          },
+          event_token: token,
+        });
+        return Promise.resolve({data: {
+          id: caseId,
+          data: {
+            field1: 'value1',
+          },
+        }});
+      },
+    };
+
+    const updatedCase = await updateCase(httpStub)(caseId)(eventId)();
+    expect(updatedCase).toEqual({
+      id: caseId,
+      data: {
+        field1: 'value1',
+      },
     });
   });
 });

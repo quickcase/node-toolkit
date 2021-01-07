@@ -1,6 +1,37 @@
 const RADIX_36 = 36;
 
 /**
+ * @typedef CreatePayload
+ * @type {object}
+ * @property {object} data optional key value pairs of case fields for the new case
+ * @property {string} summary optional motivation of the case creation
+ * @property {string} age optional longer explanation of the case creation
+ */
+
+/**
+ * Create a new case in QuickCase Data Store.
+ *
+ * @param {httpClient} http Configured, ready-to-use HTTP client
+ * @param {string} caseTypeId Unique case type identifier
+ * @param {string} eventId Unique event trigger identifier to use for creation
+ * @param {CreatePayload} payload Object formed of optional `data`, `summary` and `description`
+ * @return {Promise} Promise resolved with the case for the given identifier.
+ */
+export const createCase = (http) => (caseTypeId) => (eventId) => async (payload = {}) => {
+  const {data: {token}} = await http.get(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
+  const createRes = await http.post(`/case-types/${caseTypeId}/cases`, {
+    data: payload.data,
+    event: {
+      id: eventId,
+      summary: payload.summary,
+      description: payload.description,
+    },
+    event_token: token,
+  });
+  return createRes.data;
+};
+
+/**
  * Fetch a case from QuickCase Data Store by ID.
  *
  * @param {httpClient} http Configured, ready-to-use HTTP client

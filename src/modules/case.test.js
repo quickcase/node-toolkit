@@ -1,4 +1,5 @@
 import {
+  createCase,
   fetchCase,
   fieldExtractor,
   idFrom36,
@@ -128,5 +129,82 @@ describe('isCaseIdentifier36', () => {
 
   test('should return false when the string is not a base 36 representation of case identifier', () => {
     expect(isCaseIdentifier36('00000kf12oi')).toBe(false);
+  });
+});
+
+describe('createCase', () => {
+  test('should create a case for given case type and event', async () => {
+    const caseTypeId = 'aCaseType';
+    const eventId = 'anEvent';
+    const token = 'trigger-token';
+    const payload = {
+      data: {field1: 'value1'},
+      summary: 'A summary',
+      description: 'A description',
+    };
+    const caseId = '1234123412341238';
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
+        return Promise.resolve({data: {token}});
+      },
+      post: (url, body) => {
+        expect(url).toEqual(`/case-types/${caseTypeId}/cases`);
+        expect(body).toEqual({
+          data: payload.data,
+          event: {
+            id: eventId,
+            summary: payload.summary,
+            description: payload.description,
+          },
+          event_token: token,
+        });
+        return Promise.resolve({data: {
+          id: caseId,
+          data: body.data,
+        }});
+      },
+    };
+
+    const createdCase = await createCase(httpStub)(caseTypeId)(eventId)(payload);
+    expect(createdCase).toEqual({
+      id: caseId,
+      data: payload.data,
+    });
+  });
+
+  test('should create a case for given case type and event without payload', async () => {
+    const caseTypeId = 'aCaseType';
+    const eventId = 'anEvent';
+    const token = 'trigger-token';
+    const caseId = '1234123412341238';
+    const httpStub = {
+      get: (url) => {
+        expect(url).toEqual(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
+        return Promise.resolve({data: {token}});
+      },
+      post: (url, body) => {
+        expect(url).toEqual(`/case-types/${caseTypeId}/cases`);
+        expect(body).toEqual({
+          data: undefined,
+          event: {
+            id: eventId,
+            summary: undefined,
+            description: undefined,
+          },
+          event_token: token,
+        });
+        return Promise.resolve({data: {
+          id: caseId,
+          data: {},
+        }});
+      },
+    };
+
+    const createdCase = await createCase(httpStub)(caseTypeId)(eventId)();
+    expect(createdCase).toEqual({
+      id: caseId,
+      data: {},
+    });
   });
 });

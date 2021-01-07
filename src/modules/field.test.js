@@ -1,4 +1,4 @@
-import {isNo, isYes} from './field';
+import {isNo, isYes, newCollection} from './field';
 
 describe('isNo', () => {
   test('should be true when value is `No`', () => {
@@ -33,5 +33,19 @@ describe('isYes', () => {
 
   test('should handle value as case-insensitive', () => {
     expect(isYes('yes')).toBe(true);
+  });
+});
+
+describe('newCollection', () => {
+  test('should return empty array when no input', () => {
+    expect(newCollection()).toEqual([]);
+  });
+
+  test('should convert array to QuickCase collection', () => {
+    expect(newCollection(['1', '2', '3'])).toEqual([
+      {value: '1'},
+      {value: '2'},
+      {value: '3'},
+    ]);
   });
 });

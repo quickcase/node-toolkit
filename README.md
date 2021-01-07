@@ -627,6 +627,29 @@ isYes(null); // false
 isYes('No'); // false
 ```
 
+#### newCollection(array)
+
+Convert a Javascript array to a QuickCase collection value.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| array | array | Optional. Javascript array to convert to collection value |
+
+##### Returns
+
+Array formatted as a QuickCase collection.
+
+#### Example
+
+```javascript
+import {newCollection} from '@quickcase/node-toolkit';
+
+newCollection(); // []
+newCollection(['1', '2', '3']); // [{value: '1'},{value: '2'},{value: '3'}]
+```
+
 ### HTTP Client
 
 #### httpClient(baseUrl, axiosInstance = axios)(accessTokenProvider)

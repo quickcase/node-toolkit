@@ -8,6 +8,7 @@ const DEFAULT_CONFIG = Object.freeze({
   rolesExtractor: defaultRolesExtractor,
   scopesExtractor: defaultScopesExtractor,
   onError: send401,
+  userInfoScope: 'profile',
 });
 
 const withDefaults = (config) => Object.assign({}, DEFAULT_CONFIG, config);
@@ -25,6 +26,7 @@ const withDefaults = (config) => Object.assign({}, DEFAULT_CONFIG, config);
  * @property {RolesExtractor} rolesExtractor Function extracting roles from user claims
  * @property {ScopesExtractor} scopesExtractor Function extracting scopes from access token claims
  * @property {UserInfoRetriever} userInfoRetriever Function retrieving the user claims from the OIDC provider
+ * @property {string} userInfoScope Scope controlling whether retrieval of user info is attempted, defaults to `profile`
  */
 
 /**
@@ -49,7 +51,7 @@ export const oauth2Guard = (config) => {
       const scopes = config.scopesExtractor(claims);
       req.grantedAuthorities = scopes;
 
-      if (scopes.includes('profile')) {
+      if (scopes.includes(config.userInfoScope)) {
         req.userClaims = await config.userInfoRetriever(req.accessToken);
         req.grantedAuthorities = config.rolesExtractor(req.userClaims);
       }

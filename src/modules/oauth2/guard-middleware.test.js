@@ -101,6 +101,20 @@ describe('oauth2Guard', () => {
     })(req, res, next);
   });
 
+  test('should populate granted authorities for user with custom scope profile', (done) => {
+    const req = newReq({authorization: 'Bearer validJwtToken'});
+    const res = {};
+    const next = () => {
+      expect(req.grantedAuthorities).toEqual(['role1', 'role2']);
+      done();
+    };
+    oauth2Guard({
+      jwtVerifier: () => Promise.resolve({'scope': 'custom-openid'}),
+      userInfoRetriever: () => Promise.resolve(USER_INFO),
+      userInfoScope: 'custom-openid',
+    })(req, res, next);
+  });
+
   test('should populate granted authorities for user without profile', (done) => {
     const req = newReq({authorization: 'Bearer validJwtToken'});
     const res = {};

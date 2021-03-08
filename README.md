@@ -936,6 +936,7 @@ ExpressJS middleware mandating the presence of a valid access token and extracti
 * `rolesExtractor`: Optional. Function extracting roles from user claims
 * `scopesExtractor`: Optional. Function extracting scopes from access token claims
 * `userInfoRetriever`: Required. Function retrieving the user claims from the OIDC provider
+* `userInfoScope`: Optional. String controlling whether the retrieval of user info should be attempted. Defaults to `profile`.
 
 ##### Example
 

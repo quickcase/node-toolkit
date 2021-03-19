@@ -48,14 +48,27 @@ export const fetchCase = (http) => (caseId) => async () => {
  * Given a case and the path to a field, extract the value of that field. When accessing case fields, this approach should
  * be preferred as a way to avoid hard references to case fields through the use of a fields map.
  *
- * @param aCase Case from which the field value should be extracted
- * @param path Path to a field using object notation.
+ * @param {object} aCase Case from which the field value should be extracted
+ * @param {string|Array.<string>} path One or many paths to a field using object notation.
  * @returns {any} Value associated to field path if found, `undefined` if case has no data or path cannot be found
  */
 export const fieldExtractor = (aCase) => (path) => {
+  const extractor = singleFieldExtractor(aCase);
+  if (Array.isArray(path)) {
+    return arrayFieldExtractor(extractor)(path);
+  } else if(typeof path === 'string') {
+    return extractor(path);
+  } else {
+    throw `Unsupported path '${path}' of type ${typeof path}`;
+  }
+};
+
+const singleFieldExtractor = (aCase) => (path) => {
   const caseData = dataExtractor(aCase);
   return caseData ? field(caseData)(path.split('.')) : undefined;
 };
+
+const arrayFieldExtractor = (extractor) => (paths) => paths.map(extractor);
 
 /**
  * Handle the fact that legacy search endpoint return cases with data under `case_data` while others endpoints return data under `data`.

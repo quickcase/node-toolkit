@@ -74,6 +74,29 @@ describe('fieldExtractor', () => {
     const fieldValue = fieldExtractor(aCase)('level1.level2');
     expect(fieldValue).toBeUndefined();
   });
+
+  test('should extract array of fields from case data', () => {
+    const aCase = {
+      data: {
+        level1: {level2: 'value1'},
+        field2: 'value2',
+      },
+    };
+
+    const values = fieldExtractor(aCase)([
+      'level1.level2',
+      'notFound1',
+      'field2',
+      'notFound2',
+    ]);
+    expect(values).toEqual(['value1', undefined, 'value2', undefined]);
+  });
+
+  test('should throw error if provided path is not of a supported type', () => {
+    const aCase = {};
+
+    expect(() => fieldExtractor(aCase)(123)).toThrow('Unsupported path \'123\' of type number');
+  });
 });
 
 describe('isCaseIdentifier', () => {

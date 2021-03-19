@@ -144,12 +144,13 @@ Extract the value of a field from the given case.
 | Name | Type | Description |
 |------|------|-------------|
 | aCase | object | Required. A case object as returned by QuickCase's Data Store |
-| path | string, Array.<string> | Required. One or many paths to a field using object notation. |
+| path | string, Array.<string>, object | Required. One or many paths to a field using object notation. |
 
 ##### Returns
 
 * When `path` is a string: Value of the specified field; or `undefined` if path cannot be found in case data.
 * When `path` is an array: An array of the same size, with extracted values in the same position as their respective path. Paths not found are extracted as `undefined`.
+* When `path` is an object: An object of the same shape, with extracted values in place of the paths. Paths not found are extracted as `undefined`.
 
 #### Example
 
@@ -175,6 +176,14 @@ const value2 = fields('field2');
 // Bulk extract as array
 const values = fields(['complex1.field1', 'field2', 'field3']);
 // ['value1', 'value2', undefined]
+
+// Bulk extract as object
+const values = fields({
+  value1: 'complex1.field1',
+  value2: 'field2',
+  value3: 'field3',
+});
+// {value1: 'value1', value2: 'value2', value3: undefined}
 ```
 
 #### isCaseIdentifier(identifier)

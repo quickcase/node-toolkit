@@ -92,10 +92,38 @@ describe('fieldExtractor', () => {
     expect(values).toEqual(['value1', undefined, 'value2', undefined]);
   });
 
+  test('should extract object of fields from case data', () => {
+    const aCase = {
+      data: {
+        level1: {level2: 'value1'},
+        field2: 'value2',
+      },
+    };
+
+    const values = fieldExtractor(aCase)({
+      value1: 'level1.level2',
+      notFound1: 'notFound1',
+      value2: 'field2',
+      notFound2: 'notFound2',
+    });
+    expect(values).toEqual({
+      value1: 'value1',
+      notFound1: undefined,
+      value2: 'value2',
+      notFound2: undefined,
+    });
+  });
+
   test('should throw error if provided path is not of a supported type', () => {
     const aCase = {};
 
     expect(() => fieldExtractor(aCase)(123)).toThrow('Unsupported path \'123\' of type number');
+  });
+
+  test('should throw error if provided path is null', () => {
+    const aCase = {};
+
+    expect(() => fieldExtractor(aCase)(null)).toThrow('Unsupported path \'null\' of type object');
   });
 });
 

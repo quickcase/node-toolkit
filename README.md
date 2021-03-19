@@ -1080,6 +1080,15 @@ Combine multiple criteria with the `AND` operator.
 
 Combine multiple criteria with the `OR` operator.
 
+##### data(...fields)
+
+Build fully qualified field names to search on.
+
+```js
+s.data('level1', 'level2');
+// 'data.level1.level2'
+```
+
 ##### contains(field, value)
 
 Build a criterion matching `MultiSelectList` and `Collection` fields which contains the provided value.
@@ -1155,21 +1164,21 @@ const searchClient = httpClient('http://data-store:4452')(() => Promise.resolve(
 
 const query = s.query(
   s.and(
-    s.contains('data.multiSelectField', 'VALUE_1'),
-    s.contains('data.collectionField', s.collectionItem('subfield1', 'value1')),
-    s.dateRange('data.dateField', s.fromToDate('2020-01-01', '2020-01-31')),
+    s.contains(s.data('multiSelectField'), 'VALUE_1'),
+    s.contains(s.data('collectionField'), s.collectionItem('subfield1', 'value1')),
+    s.dateRange(s.data('dateField'), s.fromToDate('2020-01-01', '2020-01-31')),
     s.equals('state', 'STATE_1'),
-    s.equalsIgnoreCase('data.field1', 'fooBar'),
-    s.equalsAny('data.field2', ['VALUE_1', 'VALUE_2']),
-    s.equalsAnyIgnoreCase('data.field2', ['value_1', 'value_2']),
-    s.hasValue('data.field3', true),
-    s.is('data.yesOrNoField', true),
+    s.equalsIgnoreCase(s.data('field1'), 'fooBar'),
+    s.equalsAny(s.data('field2'), ['VALUE_1', 'VALUE_2']),
+    s.equalsAnyIgnoreCase(s.data('field2'), ['value_1', 'value_2']),
+    s.hasValue(s.data('field3'), true),
+    s.is(s.data('yesOrNoField'), true),
   )
 );
 
 const sort = s.sort(
   s.sortAsc('state'),
-  s.sortDesc('data.field1'),
+  s.sortDesc(s.data('field1')),
 )
 
 const page = s.page(1, 30);

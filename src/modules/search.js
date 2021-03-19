@@ -53,6 +53,13 @@ const page = (index, size) => ({
   }
 });
 
+/**
+ * Build object notation used by search criteria for data fields.
+ * @param {Array.<string>} fields Field names to use to build the object notation for the field path
+ * @return {string} Fully-qualified object notation for the data field
+ */
+const data = (...fields) => 'data.' + fields.join('.');
+
 const sort = (...args) => ({
   sort: args,
 });
@@ -79,6 +86,7 @@ const collectionItem = (field, value) => ({
 export const searchDsl = Object.freeze({
   not,
   and,
+  data,
   equals,
   equalsIgnoreCase,
   equalsAny,

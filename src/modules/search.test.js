@@ -213,4 +213,10 @@ describe('searchDsl', () => {
     });
   });
 
+  test('should return constructed path to data field', () => {
+    expect(dsl.data('field1')).toEqual('data.field1');
+    expect(dsl.data('level1.level2')).toEqual('data.level1.level2');
+    expect(dsl.data('level1', 'level2')).toEqual('data.level1.level2');
+    expect(dsl.data(...['level1', 'level2'])).toEqual('data.level1.level2');
+  })
 });

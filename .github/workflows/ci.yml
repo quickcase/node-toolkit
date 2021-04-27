@@ -105,6 +105,8 @@ jobs:
         uses: actions/setup-node@v2.1.5
         with:
           node-version: '12.x'
+          registry-url: https://registry.npmjs.org
+          scope: '@quickcase'
 
       - name: Install deps
         run: npm ci

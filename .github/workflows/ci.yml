@@ -90,6 +90,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v2.1.5
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup NodeJS 12
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '12.x'
+
+      - name: Install deps
+        run: npm ci
+
       - name: Publish
         run: npm publish
         env:

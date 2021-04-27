@@ -277,7 +277,7 @@ isCaseIdentifier36('0fl6udxa2qj') // > true if the base36 string is a valid case
 isCaseIdentifier36('xa2qj') // > false if the base36 string is not a valid case identifier
 ```
 
-#### updateCase(httpClient)(caseTypeId)(eventId)(payload)
+#### updateCase(httpClient)(caseId)(eventId)(payload)
 
 Update/progress an existing case in QuickCase Data Store.
 
@@ -307,13 +307,13 @@ import {updateCase, httpClient} from '@quickcase/node-toolkit';
 // A configured `httpClient` is required to create a case
 const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
 
-const aCase = await updateCase(client)('aCaseType')('anEvent')({
+const aCase = await updateCase(client)('1583178988495195')('anEvent')({
   data: {field1: 'value1'},
   summary: 'Updated case',
 });
 /*
 {
-  id: '1234123412341238',
+  id: '1583178988495195',
   state: 'Updated',
   data: {field1: 'value1'},
   ...

@@ -1,0 +1,130 @@
+name: CI
+on:
+  release:
+    types: [released]
+  push:
+    branches:
+      - main
+  pull_request:
+  schedule:
+    - cron: '0 0 * * *'
+permissions:
+  contents: read
+jobs:
+  start:
+    name: Start
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    outputs:
+      slack_message_id: ${{ steps.slack.outputs.message_id }}
+    steps:
+      - name: Notify slack starting
+        if: success() && env.SLACK_BOT_TOKEN != 0
+        id: slack
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          channel: dev
+          status: STARTING
+          color: warning
+
+  quality_checks:
+    name: Quality checks
+    needs: [start]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Get npm cache directory
+        id: npm-cache
+        run: |
+          echo "::set-output name=dir::$(npm config get cache)"
+      - uses: actions/cache@v1
+        with:
+          path: ${{ steps.npm-cache.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Setup NodeJS 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install deps
+        run: npm ci
+      - name: Run tests
+        run: npm test -- --coverage
+      - name: Audit dependencies
+        run: npm run audit:check
+
+  lint:
+    name: Lint
+    needs: [start]
+    if: github.ref != 'refs/heads/main' # Don't run for main branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Lint Code Base
+        uses: docker://github/super-linter:v2.1.1
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          VALIDATE_JAVASCRIPT_ES: true
+          VALIDATE_JSON: true
+          VALIDATE_YAML: true
+
+  publish:
+    name: Publish
+    needs: [quality_checks, lint]
+    if: github.event_name == 'release' && github.event.action == 'released'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Publish
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+  end:
+    name: End
+    needs: [start, quality_checks, lint, publish]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+    steps:
+      - name: Build summary
+        id: summary
+        env:
+          QUALITY: ${{ needs.quality_checks.result }}
+          LINT: ${{ needs.lint.result }}
+          PUBLISH: ${{ needs.publish.result }}
+        run: |
+          echo ::set-output name=success::$(if [[ "$QUALITY$LINT$PUBLISH" =~ ^(success|skipped)+$ ]]; then echo "true"; else echo "false"; fi)
+      - name: Notify slack success
+        if: steps.summary.outputs.success == 'true' && env.SLACK_BOT_TOKEN != 0
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          message_id: ${{ needs.start.outputs.slack_message_id }}
+          channel: dev
+          status: SUCCESS
+          color: good
+      - name: Notify slack fail
+        if: steps.summary.outputs.success != 'true' && env.SLACK_BOT_TOKEN != 0
+        uses: voxmedia/github-action-slack-notify-build@v1
+        with:
+          message_id: ${{ needs.start.outputs.slack_message_id }}
+          channel: dev
+          status: FAILED
+          color: danger

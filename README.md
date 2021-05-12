@@ -1,6 +1,6 @@
 # node-toolkit
 [![CI](https://github.com/quickcase/node-toolkit/actions/workflows/ci.yml/badge.svg)](https://github.com/quickcase/node-toolkit/actions/workflows/ci.yml)
-[![npm version](https://badge.fury.io/js/%40quickcase%2Fnode-toolkit.svg)](https://badge.fury.io/js/%40quickcase%2Fnode-toolkit)
+![npm (scoped)](https://img.shields.io/npm/v/@quickcase/node-toolkit)
 
 NodeJS toolkit for QuickCase.
 

@@ -1262,6 +1262,48 @@ publishBatchMessage(config)(options)
 
 This library also ships with test helpers available through a separate module `@quickcase/node-toolkit/test` under the `@quickcase/node-toolkit` package.
 
+#### givenMiddleware(middleware).then(req).expect[Response|Next]()
+
+Asynchronous function encapsulating the execution of an Express middleware for test purpose.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| middleware | function | Required. Express middleware function taking 3 parameters: req, res, next |
+| req | object | Required. Request object to be passed to middleware  |
+
+##### Returns
+
+When executed with `.expectResponse()`:
+  - returns a `Promise` resolved with the response details if a response was sent with `res.send()` or `res.json()`
+  - returns a `Promise` rejected with the value of `next()` if the `next()` callback was called
+
+When executed with `.expectNext()`:
+  - returns a `Promise` resolved with the value of `next()` if the `next()` callback was called
+  - returns a `Promise` rejected with the response details if a response was sent with `res.send()` or `res.json()`
+
+##### Example
+
+```js
+import {givenMiddleware} from '@quickcase/node-toolkit/test';
+
+test('should resolve with response when response expected', async () => {
+  const middleware = (req, res) => res.status(201).json({foo: 'bar'});
+  const res = await givenMiddleware(middleware).when({}).expectResponse();
+  expect(res).toEqual({
+    status: 201,
+    body: {foo: 'bar'},
+  });
+});
+
+test('should resolve with next when next expected', async () => {
+  const middleware = (req, res, next) => next('error');
+  const next = await givenMiddleware(middleware).when({}).expectNext();
+  expect(next).toEqual('error');
+});
+```
+
 #### stubConfig(config)
 
 Programatically creates a stub of a [lorenwest/node-config](https://github.com/lorenwest/node-config) config instance.
@@ -1271,7 +1313,7 @@ The stub comes with support for the following methods:
 - `get(property)`
 - `has(property)`
 
-#### Example
+##### Example
 
 ```js
 import {stubConfig} from '@quickcase/node-toolkit/test';

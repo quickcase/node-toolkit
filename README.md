@@ -21,8 +21,9 @@ npm i @quickcase/node-toolkit
 * [Field](#field)
 * [HTTP Client](#http-client)
 * [OAuth2](#oauth2)
-* [Search](#search)
 * [Redis Gateway](#redis-gateway)
+* [Search](#search)
+* [Test](#test)
 
 ### Cache
 
@@ -1255,4 +1256,56 @@ publishBatchMessage(config)(options)
 /*
 ["OK"]
 */
+```
+
+### Test
+
+This library also ships with test helpers available through a separate module `@quickcase/node-toolkit/test` under the `@quickcase/node-toolkit` package.
+
+#### stubConfig(config)
+
+Programatically creates a stub of a [lorenwest/node-config](https://github.com/lorenwest/node-config) config instance.
+This is useful for instances where a config instance is passed as a parameter to a function and the function needs to be tested with various configurations.
+
+The stub comes with support for the following methods:
+- `get(property)`
+- `has(property)`
+
+#### Example
+
+```js
+import {stubConfig} from '@quickcase/node-toolkit/test';
+
+const impl = (config) => {
+  if (!config.has('Customer.dbConfig.host')) {
+    throw Error('Config missing');
+  }
+
+  const dbHost = config.get('Customer.dbConfig.host');
+
+  // use dbHost...
+  return dbHost;
+};
+
+test('should error when host not configured', () => {
+  const config = stubConfig({
+    Customer: {
+      dbConfig: {}
+    }
+  });
+
+  expect(() => impl(config)).toThrow();
+});
+
+test('should error when host not configured', () => {
+  const config = stubConfig({
+    Customer: {
+      dbConfig: {
+        host: 'hello'
+      }
+    }
+  });
+
+  expect(impl(config)).toEqual('hello');
+});
 ```

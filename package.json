@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "prepare": "npm run build",
-    "build": "babel src/modules -d lib && babel src/test-modules -d test",
+    "build": "babel src/modules -d lib --ignore 'src/**/*.test.js' && babel src/test-modules -d test --ignore 'src/**/*.test.js'",
     "test": "jest src",
     "audit:resolve": "resolve-audit",
     "audit:check": "check-audit"

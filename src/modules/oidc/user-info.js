@@ -1,5 +1,19 @@
 import axios from 'axios';
 
+const DEFAULT_PREFIX = '';
+
+const PUBLIC_CLAIMS = ['sub', 'name', 'email'];
+const PRIVATE_CLAIMS = ['roles', 'organisations'];
+
+export const claimNamesProvider = (config) => () => {
+  const prefix = typeof config.prefix === 'string' ? config.prefix : DEFAULT_PREFIX;
+  const {names} = config;
+  return {
+    ...PUBLIC_CLAIMS.reduce((acc, claim) => ({...acc, [claim]: names[claim]}), {}),
+    ...PRIVATE_CLAIMS.reduce((acc, claim) => ({...acc, [claim]: prefix + names[claim]}), {}),
+  };
+};
+
 export const userInfoRetriever = ({userInfoUri}) => (accessToken) =>
   axios.get(userInfoUri, {headers: {'Authorization': `Bearer ${accessToken}`}}).then(res => res.data);
 

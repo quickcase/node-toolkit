@@ -1,10 +1,55 @@
 import axios from 'axios';
 import {
+  claimNamesProvider,
   userInfoExtractor,
   userInfoRetriever,
 } from './user-info';
 
 jest.mock('axios');
+
+describe('claimNamesProvider', () => {
+  test('should provide non-prefixed claim names', () => {
+    const claimNames = claimNamesProvider({
+      prefix: undefined,
+      names: {
+        sub: 'custom-sub',
+        name: 'custom-name',
+        email: 'custom-email',
+        roles: 'app.quickcase.claims/roles',
+        organisations: 'app.quickcase.claims/organisations',
+      },
+    })();
+
+    expect(claimNames).toEqual({
+      sub: 'custom-sub',
+      name: 'custom-name',
+      email: 'custom-email',
+      roles: 'app.quickcase.claims/roles',
+      organisations: 'app.quickcase.claims/organisations',
+    });
+  });
+
+  test('should provide prefixed claim names', () => {
+    const claimNames = claimNamesProvider({
+      prefix: 'a-prefix:',
+      names: {
+        sub: 'custom-sub',
+        name: 'custom-name',
+        email: 'custom-email',
+        roles: 'app.quickcase.claims/roles',
+        organisations: 'app.quickcase.claims/organisations',
+      },
+    })();
+
+    expect(claimNames).toEqual({
+      sub: 'custom-sub',
+      name: 'custom-name',
+      email: 'custom-email',
+      roles: 'a-prefix:app.quickcase.claims/roles',
+      organisations: 'a-prefix:app.quickcase.claims/organisations',
+    });
+  });
+});
 
 describe('userInfoRetriever', () => {
   test('should fetch user info', async () => {

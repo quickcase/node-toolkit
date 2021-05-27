@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {
+  userInfoExtractor,
   userInfoRetriever,
 } from './user-info';
 
@@ -17,5 +18,63 @@ describe('userInfoRetriever', () => {
 
     expect(resp).toEqual(expectedResp.data);
     expect(axios.get).toHaveBeenCalledWith(userInfoUri, {headers: {Authorization: `Bearer ${accessToken}`}});
+  });
+});
+
+describe('userInfoExtractor', () => {
+  test('should parse user info claims from provided names', async () => {
+    const claimNames = ({
+      sub: 'sub',
+      name: 'name',
+      email: 'email',
+      roles: 'app.quickcase.claims/roles',
+      organisations: 'app.quickcase.claims/organisations',
+    });
+
+    const claims = userInfoExtractor(() => claimNames)({
+      'sub': 'user-123',
+      'name': 'Test User',
+      'email': 'test-user@quickcase.app',
+      'app.quickcase.claims/roles': 'role1,role2',
+      'app.quickcase.claims/organisations': '{"ORG1": {"access": "GROUP"}}',
+    });
+
+    expect(claims).toEqual({
+      sub: 'user-123',
+      name: 'Test User',
+      email: 'test-user@quickcase.app',
+      roles: ['role1', 'role2'],
+      organisations: {
+        'ORG1': {
+          'access': 'GROUP',
+        }
+      }
+    });
+  });
+
+  test('should default value when provided names do not match', async () => {
+    const claimNames = ({
+      sub: 'not/sub',
+      name: 'not/name',
+      email: 'not/email',
+      roles: 'not/app.quickcase.claims/roles',
+      organisations: 'not/app.quickcase.claims/organisations',
+    });
+
+    const claims = userInfoExtractor(() => claimNames)({
+      'sub': 'user-123',
+      'name': 'Test User',
+      'email': 'test-user@quickcase.app',
+      'app.quickcase.claims/roles': 'role1,role2',
+      'app.quickcase.claims/organisations': '{"ORG1": {"access": "GROUP"}}',
+    });
+
+    expect(claims).toEqual({
+      sub: undefined,
+      name: undefined,
+      email: undefined,
+      roles: [],
+      organisations: {}
+    });
   });
 });

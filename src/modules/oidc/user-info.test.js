@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {
   claimNamesProvider,
+  userClaimsSupplier,
   userInfoExtractor,
   userInfoRetriever,
 } from './user-info';
@@ -121,5 +122,18 @@ describe('userInfoExtractor', () => {
       roles: [],
       organisations: {}
     });
+  });
+});
+
+describe('userClaimsSupplier', () => {
+  test('should return extracted claims', async () => {
+    const supplier = userClaimsSupplier({
+      userInfoRetriever: (token) => Promise.resolve({sub: `user-${token}`}),
+      userInfoExtractor: (userInfo) => ({sub: `extracted: ${userInfo.sub}`}),
+    });
+
+    const {sub} = await supplier('a-token');
+
+    expect(sub).toEqual('extracted: user-a-token');
   });
 });

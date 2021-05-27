@@ -34,3 +34,6 @@ export const userInfoExtractor = (claimNamesProvider) => (userInfo) => {
     return {...acc, [key]: value};
   }, {});
 };
+
+export const userClaimsSupplier = ({userInfoRetriever, userInfoExtractor}) => (accessToken) =>
+  userInfoRetriever(accessToken).then(userInfoExtractor);

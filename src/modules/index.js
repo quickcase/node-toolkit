@@ -1,6 +1,7 @@
 export * from './cache';
 export * from './case';
 export * from './case-access';
+export * from './config';
 export * from './definition';
 export * from './document';
 export * from './express';

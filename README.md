@@ -15,6 +15,7 @@ npm i @quickcase/node-toolkit
 * [Cache](#cache)
 * [Case](#case)
 * [Case Access](#case-access)
+* [Config](#config)
 * [Definition](#definition)
 * [Document](#document)
 * [Express](#express)
@@ -432,6 +433,61 @@ import {revokeUserAccess, httpClient} from '@quickcase/node-toolkit';
 const client = httpClient('http://data-store:4452')(() => Promise.resolve('access-token'));
 
 await revokeUserAccess(client)('1234123412341238')('user-1');
+```
+
+### Config
+
+Utilities to deal with configuration objects.
+
+#### mergeConfig(defaultConfig)(overrides)
+
+Deep merge of a default configuration with partial overrides.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| defaultConfig | object| Required. Object representing the entire configuration contract with default values for all properties. Properties which do not have a default value must be explicitly assigned `undefined`. |
+| overrides | object | Required. Subset of `defaultConfig`. Overridden properties must exactly match the shape of `defaultConfig` |
+
+##### Returns
+
+`object` with the same shape as `defaultConfig` and containing the merged properties of `defaultConfig` and `overrides`.
+
+#### Example
+
+```javascript
+import {mergeConfig} from '@quickcase/node-toolkit';
+
+const DEFAULT_CONFIG = {
+  prop1: 'value1',
+  prop2: {
+    prop21: 'value21',
+    prop22: 'value21',
+    prop23: 'value23',
+  },
+  prop3: undefined,
+};
+
+const config = mergeConfig(DEFAULT_CONFIG)({
+  prop2: {
+    prop21: undefined,
+    prop22: 'override21',
+    prop23: null,
+  }
+});
+
+/*
+{
+  prop1: 'value1',
+  prop2: {
+    prop21: 'value21',
+    prop22: 'override21',
+    prop23: null,
+  },
+  prop3: undefined,
+}
+*/
 ```
 
 ### Definition

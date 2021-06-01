@@ -439,6 +439,42 @@ await revokeUserAccess(client)('1234123412341238')('user-1');
 
 Utilities to deal with configuration objects.
 
+#### camelConfig(config)
+
+Recursively convert keys in configuration objects to camel case for consistency and ease of use.
+
+##### Arguments
+
+| Name | Type | Description |
+|------|------|-------------|
+| config | object | Required. Object containing the key/value pair of configuration properties. |
+
+##### Returns
+
+`object` with the same shape as `config` but for which all keys are now camel case. Values are preserved unaltered.
+
+#### Example
+
+```javascript
+import {camelConfig} from '@quickcase/node-toolkit';
+
+const config = camelConfig({
+  'a-prop-2': {
+    'a_prop_21': undefined,
+    'a-prop-22': 'override21',
+  },
+});
+
+/*
+{
+  aProp2: {
+    aProp21: 'value21',
+    aProp22: 'override21',
+  },
+}
+*/
+```
+
 #### mergeConfig(defaultConfig)(overrides)
 
 Deep merge of a default configuration with partial overrides.

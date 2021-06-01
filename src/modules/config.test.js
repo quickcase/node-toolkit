@@ -1,4 +1,4 @@
-import {mergeConfig} from './config';
+import {camelConfig, mergeConfig} from './config';
 
 describe('mergeConfig', () => {
   test('should return default configuration when no override provided', () => {
@@ -71,6 +71,38 @@ describe('mergeConfig', () => {
     expect(config).toEqual({
       prop1: 'value1',
       prop2: null,
+    });
+  });
+});
+
+describe('camelConfig', () => {
+  test('should return config as is when already in camel case', () => {
+    const config = camelConfig({prop1: 'value1'});
+    expect(config).toEqual({prop1: 'value1'});
+  });
+
+  test('should camel case top-level properties', () => {
+    const config = camelConfig({
+      prop1: 'value1',
+      'a-prop-2': 'value2',
+    });
+    expect(config).toEqual({prop1: 'value1', aProp2: 'value2'});
+  });
+
+  test('should camel case nested properties', () => {
+    const config = camelConfig({
+      prop1: 'value1',
+      prop2: {
+        'a-nested-prop-2': 'value21',
+        'another_nested_prop_2': 'value22',
+      },
+    });
+    expect(config).toEqual({
+      prop1: 'value1',
+      prop2: {
+        aNestedProp2: 'value21',
+        anotherNestedProp2: 'value22',
+      },
     });
   });
 });

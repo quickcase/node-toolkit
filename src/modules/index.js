@@ -8,5 +8,6 @@ export * from './express';
 export * from './field';
 export * from './http-client';
 export * from './oauth2';
+export * from './oidc';
 export * from './search';
 export * from './redis-gateway';

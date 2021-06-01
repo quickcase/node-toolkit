@@ -38,7 +38,7 @@ describe('publishBatchMessage', () => {
       .mockReturnValue(redisClient);
   });
 
-  test('should return success message when published', async (done) => {
+  test('should return success message when published', (done) => {
     redisClient.quit = () => done();
 
     publishBatchMessage({})(BATCH_MESSAGE).then(
@@ -48,7 +48,7 @@ describe('publishBatchMessage', () => {
     );
   });
 
-  test('should throw error when batch already exists', async (done) => {
+  test('should throw error when batch already exists', (done) => {
     IS_BATCH_EXIST = 1;
     const callerReference = 'case-ref';
     publishBatchMessage({})(BATCH_MESSAGE)
@@ -59,7 +59,7 @@ describe('publishBatchMessage', () => {
   });
 
 
-  test('should throw error when execution fails', async (done) => {
+  test('should throw error when execution fails', (done) => {
     const errorMessage = 'Error occurred on execution.';
     executionPromise = () => Promise.reject(errorMessage);
     redisClient.quit = () => done();
@@ -70,7 +70,7 @@ describe('publishBatchMessage', () => {
   });
 
   describe('Mandatory fields check', () => {
-    test('should check options object', async (done) => {
+    test('should check options object', (done) => {
 
       publishBatchMessage({})()
         .catch(err => {
@@ -78,14 +78,14 @@ describe('publishBatchMessage', () => {
           done();
         });
     });
-    test('should check caller reference', async (done) => {
+    test('should check caller reference', (done) => {
       publishBatchMessage({})({jobs: {}, notifyUrl: ''})
         .catch(err => {
           expect(err.message).toEqual('Caller Reference is mandatory.');
           done();
         });
     });
-    test('should check jobs', async (done) => {
+    test('should check jobs', (done) => {
       publishBatchMessage({})({callerReference: {}, notifyUrl: ''})
         .catch(err => {
           expect(err.message).toEqual('Jobs is mandatory.');
@@ -93,7 +93,7 @@ describe('publishBatchMessage', () => {
         });
 
     });
-    test('should check notify url', async (done) => {
+    test('should check notify url', (done) => {
       publishBatchMessage({})({callerReference: {}, jobs: {}})
         .catch(err => {
           expect(err.message).toEqual('Notify Url is mandatory.');

@@ -68,6 +68,17 @@ describe('fieldExtractor', () => {
     expect(fieldValue).toBeUndefined();
   });
 
+  test('should extract field as undefined when parent element is null', () => {
+    const aCase = {
+      data: {
+        level1: null
+      }
+    };
+
+    const fieldValue = fieldExtractor(aCase)('level1.level2');
+    expect(fieldValue).toBeUndefined();
+  });
+
   test('should extract field as undefined when case has no data', () => {
     const aCase = {};
 
@@ -112,6 +123,101 @@ describe('fieldExtractor', () => {
       value2: 'value2',
       notFound2: undefined,
     });
+  });
+
+  test('should extract simple collection item from case `data` using item index', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: 'value1'},
+            {id: '456', value: 'value2'},
+            {id: '789', value: 'value3'},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)([
+      'level1.level2[2].value',
+      'level1.level2[1].value',
+      'level1.level2[0].value',
+    ]);
+    expect(fieldValues).toEqual([
+      'value3',
+      'value2',
+      'value1',
+    ]);
+  });
+
+  test('should extract complex collection item from case `data` using item index', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: {key: 'value1'}},
+            {id: '456', value: {key: 'value2'}},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[1].value.key');
+    expect(fieldValues).toEqual('value2');
+  });
+
+  test('should extract collection item as undefined when out of range', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: 'value1'},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[1].value');
+    expect(fieldValues).toBeUndefined();
+  });
+
+  test('should extract collection item as undefined when not collection', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: 'hello',
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[0].value');
+    expect(fieldValues).toBeUndefined();
+  });
+
+  test('should extract collection item as undefined when item malformed', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [true],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[0].value');
+    expect(fieldValues).toBeUndefined();
+  });
+
+  test('should extract collection item as undefined when null', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [null],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[0].value');
+    expect(fieldValues).toBeUndefined();
   });
 
   test('should throw error if provided path is not of a supported type', () => {

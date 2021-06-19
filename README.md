@@ -165,6 +165,10 @@ const aCase = {
   data: {
     complex1: { field1: 'value1' },
     field2: 'value2',
+    collection3: [
+      {id: '123', value: {field2: 'value3'}},
+      {id: '456', value: {field2: 'value4'}},
+    ]
   }
 };
 
@@ -174,6 +178,9 @@ const fields = fieldExtractor(aCase);
 // Extract single values
 const value1 = fields('complex1.field1');
 const value2 = fields('field2');
+
+// Extract from collections
+const value3 = fields('collection3[0].value.field2'); // By index
 
 // Bulk extract as array
 const values = fields(['complex1.field1', 'field2', 'field3']);

@@ -1,4 +1,5 @@
 const RADIX_36 = 36;
+const COLLECTION_ITEM_PATTERN = /^([^\[\]]+)(?:\[([^\[\]]+)\])?$/;
 
 /**
  * @typedef CreatePayload
@@ -67,7 +68,12 @@ export const fieldExtractor = (aCase) => (path) => {
 
 const singleFieldExtractor = (aCase) => (path) => {
   const caseData = dataExtractor(aCase);
-  return caseData ? field(caseData)(path.split('.')) : undefined;
+  return caseData ? field(caseData)(path.split('.').map(parsePathElement)) : undefined;
+};
+
+const parsePathElement = (pathElement) => {
+  const [_, name, itemId] = COLLECTION_ITEM_PATTERN.exec(pathElement);
+  return {name, itemId};
 };
 
 const arrayFieldExtractor = (extractor) => (paths) => paths.map(extractor);
@@ -87,13 +93,32 @@ const dataExtractor = (aCase) => aCase && (aCase.data || aCase.case_data);
 
 const field = (from) => (pathElements) => {
   const [nextElement, ...remainingElements] = pathElements;
-  if (typeof from === 'object' && Object.keys(from).includes(nextElement)) {
-    const nextValue = from[nextElement];
-    if (remainingElements && remainingElements.length > 0) {
-      return field(nextValue)(remainingElements);
-    } else {
-      return nextValue;
+  const nextValue = extractNextElement(from, nextElement);
+
+  if (remainingElements && remainingElements.length > 0) {
+    return field(nextValue)(remainingElements);
+  } else {
+    return nextValue;
+  }
+};
+
+const isObjectWithKey = (obj, key) => obj && typeof obj === 'object' && Object.keys(obj).includes(key);
+
+const extractCollectionItem = (collection, itemId) => {
+  if (Array.isArray(collection)) {
+    return collection[parseInt(itemId)];
+  }
+};
+
+const extractNextElement = (from, {name, itemId}) => {
+  if (isObjectWithKey(from, name)) {
+    const nextValue = from[name];
+
+    if (itemId) {
+      return extractCollectionItem(nextValue, itemId);
     }
+
+    return nextValue;
   }
 };
 

@@ -181,6 +181,7 @@ const value2 = fields('field2');
 
 // Extract from collections
 const value3 = fields('collection3[0].value.field2'); // By index
+const value4 = fields('collection3[id:456].value.field2'); // By id
 
 // Bulk extract as array
 const values = fields(['complex1.field1', 'field2', 'field3']);

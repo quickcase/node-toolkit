@@ -181,6 +181,21 @@ describe('fieldExtractor', () => {
     expect(fieldValues).toBeUndefined();
   });
 
+  test('should extract collection item as undefined when invalid index', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: 'value1'},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[a].value');
+    expect(fieldValues).toBeUndefined();
+  });
+
   test('should extract collection item as undefined when not collection', () => {
     const aCase = {
       data: {
@@ -217,6 +232,61 @@ describe('fieldExtractor', () => {
     };
 
     const fieldValues = fieldExtractor(aCase)('level1.level2[0].value');
+    expect(fieldValues).toBeUndefined();
+  });
+
+  test('should extract simple collection item from case `data` using item ID', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: 'value1'},
+            {id: '456', value: 'value2'},
+            {id: '789', value: 'value3'},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)([
+      'level1.level2[id:456].value',
+      'level1.level2[id:789].value',
+      'level1.level2[id:123].value',
+    ]);
+    expect(fieldValues).toEqual([
+      'value2',
+      'value3',
+      'value1',
+    ]);
+  });
+
+  test('should extract complex collection item from case `data` using item ID', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: {key: 'value1'}},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[id:123].value.key');
+    expect(fieldValues).toEqual('value1');
+  });
+
+  test('should extract collection item as undefined when invalid ID', () => {
+    const aCase = {
+      data: {
+        level1: {
+          level2: [
+            {id: '123', value: 'value1'},
+          ],
+        }
+      }
+    };
+
+    const fieldValues = fieldExtractor(aCase)('level1.level2[id:456].value');
     expect(fieldValues).toBeUndefined();
   });
 

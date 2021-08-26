@@ -28,6 +28,28 @@ describe('expectMiddleware', () => {
       message: 'Unexpected call to next()',
     });
   });
+
+  test('should record cookies set on response', async () => {
+    const middleware = (req, res) => res.cookie('cookie1', 'value1', {secure: true})
+                                        .cookie('cookie2', 'value2', {httpOnly: true})
+                                        .send();
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 200,
+      cookies: [
+        {
+          name: 'cookie1',
+          value: 'value1',
+          options: {secure: true},
+        },
+        {
+          name: 'cookie2',
+          value: 'value2',
+          options: {httpOnly: true},
+        },
+      ],
+    });
+  });
 });
 
 describe('givenMiddleware', () => {

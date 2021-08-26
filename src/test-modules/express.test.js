@@ -88,6 +88,15 @@ describe('expectMiddleware', () => {
       redirect: '/foo/bar',
     });
   });
+
+  test('should resolve with send', async () => {
+    const middleware = (req, res) => res.send('some body');
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 200,
+      body: 'some body',
+    });
+  });
 });
 
 describe('givenMiddleware', () => {

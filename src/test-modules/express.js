@@ -21,7 +21,7 @@ export const expectMiddleware = (middleware, req, expectResponse = false) => new
   res.status = (code) => (response.status = code, res);
   res.json = (body) => (response.body = body, resolveResponse(response));
   res.redirect = (statusOrPath, path) => (Object.assign(response, path ? {status: statusOrPath, redirect: path} : {status: 302, redirect: statusOrPath}), resolveResponse(response));
-  res.send = () => resolveResponse(response);
+  res.send = res.json;
 
   middleware(req, res, next);
 });

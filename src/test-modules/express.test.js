@@ -50,6 +50,27 @@ describe('expectMiddleware', () => {
       ],
     });
   });
+
+  test('should record cookies cleared on response', async () => {
+    const middleware = (req, res) => res.clearCookie('cookie1')
+                                        .clearCookie('cookie2', {httpOnly: true})
+                                        .send();
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 200,
+      clearCookies: [
+        {
+          name: 'cookie1',
+          options: undefined,
+        },
+        {
+          name: 'cookie2',
+          options: {httpOnly: true},
+        },
+      ],
+    });
+  });
+  
 });
 
 describe('givenMiddleware', () => {

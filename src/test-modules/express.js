@@ -17,6 +17,7 @@ export const expectMiddleware = (middleware, req, expectResponse = false) => new
 
   const res = {};
   res.cookie = (name, value, options) => (response.cookies = [...(response.cookies || []), {name, value, options}], res);
+  res.clearCookie = (name, options) => (response.clearCookies = [...(response.clearCookies || []), {name, options}], res);
   res.status = (code) => (response.status = code, res);
   res.json = (body) => (response.body = body, resolveResponse(response));
   res.send = () => resolveResponse(response);

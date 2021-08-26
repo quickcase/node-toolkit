@@ -97,6 +97,14 @@ describe('expectMiddleware', () => {
       body: 'some body',
     });
   });
+
+  test('should resolve with send', async () => {
+    const middleware = (req, res) => res.end();
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 200,
+    });
+  });
 });
 
 describe('givenMiddleware', () => {

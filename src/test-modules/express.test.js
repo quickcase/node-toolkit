@@ -70,7 +70,24 @@ describe('expectMiddleware', () => {
       ],
     });
   });
-  
+
+  test('should resolve with redirection and default status', async () => {
+    const middleware = (req, res) => res.redirect('/foo/bar');
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 302,
+      redirect: '/foo/bar',
+    });
+  });
+
+  test('should resolve with redirection and custom status', async () => {
+    const middleware = (req, res) => res.redirect(301, '/foo/bar');
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 301,
+      redirect: '/foo/bar',
+    });
+  });
 });
 
 describe('givenMiddleware', () => {

@@ -20,6 +20,7 @@ export const expectMiddleware = (middleware, req, expectResponse = false) => new
   res.clearCookie = (name, options) => (response.clearCookies = [...(response.clearCookies || []), {name, options}], res);
   res.status = (code) => (response.status = code, res);
   res.json = (body) => (response.body = body, resolveResponse(response));
+  res.redirect = (statusOrPath, path) => (Object.assign(response, path ? {status: statusOrPath, redirect: path} : {status: 302, redirect: statusOrPath}), resolveResponse(response));
   res.send = () => resolveResponse(response);
 
   middleware(req, res, next);

@@ -34,6 +34,9 @@ jobs:
     needs: [start]
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    strategy:
+      matrix:
+        node: [ 12, 14, 16 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -49,10 +52,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Setup NodeJS 12
+      - name: Setup NodeJS ${{ matrix.node }}
         uses: actions/setup-node@v2.4.1
         with:
-          node-version: '12.x'
+          node-version: ${{ matrix.node }}
 
       - name: Install deps
         run: npm ci

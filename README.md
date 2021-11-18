@@ -1393,6 +1393,7 @@ test('should resolve with response when response expected', async () => {
   const res = await givenMiddleware(middleware).when({}).expectResponse();
   expect(res).toEqual({
     status: 201,
+    headers: {},
     body: {foo: 'bar'},
   });
 });

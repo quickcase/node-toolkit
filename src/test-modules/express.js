@@ -1,3 +1,5 @@
+const isTrueObject = (variable) => typeof variable === 'object' && !Array.isArray(variable) && variable !== null;
+
 /**
  * Asynchronous function encapsulating the execution of an Express middleware for test purpose.
  * @param {function} middleware Express middleware function taking 3 parameters: req, res, next
@@ -13,12 +15,14 @@ export const expectMiddleware = (middleware, req, expectResponse = false) => new
     error,
   }) : resolve;
 
-  let response = {status: 200};
+  let response = {status: 200, headers: {}};
 
   const res = {};
   res.cookie = (name, value, options) => (response.cookies = [...(response.cookies || []), {name, value, options}], res);
   res.clearCookie = (name, options) => (response.clearCookies = [...(response.clearCookies || []), {name, options}], res);
   res.status = (code) => (response.status = code, res);
+  res.set = (field, value) => (response.headers = {...response.headers, ...(isTrueObject(field) ? field : {[field]: value})}, res);
+  res.header = res.set;
   res.json = (body) => (response.body = body, resolveResponse(response));
   res.redirect = (statusOrPath, path) => (Object.assign(response, path ? {status: statusOrPath, redirect: path} : {status: 302, redirect: statusOrPath}), resolveResponse(response));
   res.send = res.json;

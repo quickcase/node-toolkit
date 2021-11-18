@@ -6,13 +6,14 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 201,
+      headers: {},
       body: {foo: 'bar'},
     });
   });
 
   test('should reject with response when response not expected', async () => {
     const middleware = (req, res) => res.send();
-    await expect(expectMiddleware(middleware, {}, false)).rejects.toEqual({status: 200});
+    await expect(expectMiddleware(middleware, {}, false)).rejects.toEqual({status: 200, headers: {}});
   });
 
   test('should resolve with next when next expected', async () => {
@@ -36,6 +37,7 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 200,
+      headers: {},
       cookies: [
         {
           name: 'cookie1',
@@ -58,6 +60,7 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 200,
+      headers: {},
       clearCookies: [
         {
           name: 'cookie1',
@@ -71,11 +74,32 @@ describe('expectMiddleware', () => {
     });
   });
 
+  test('should record headers set on response', async () => {
+    const middleware = (req, res) => res.set('header1', 'value1')
+                                        .set({
+                                          header2: 'value2',
+                                          header3: 'value3',
+                                        })
+                                        .header('header4', 'value4')
+                                        .send();
+    const res = await expectMiddleware(middleware, {}, true);
+    expect(res).toEqual({
+      status: 200,
+      headers: {
+        header1: 'value1',
+        header2: 'value2',
+        header3: 'value3',
+        header4: 'value4',
+      },
+    });
+  });
+
   test('should resolve with redirection and default status', async () => {
     const middleware = (req, res) => res.redirect('/foo/bar');
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 302,
+      headers: {},
       redirect: '/foo/bar',
     });
   });
@@ -85,6 +109,7 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 301,
+      headers: {},
       redirect: '/foo/bar',
     });
   });
@@ -94,6 +119,7 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 200,
+      headers: {},
       body: 'some body',
     });
   });
@@ -103,6 +129,7 @@ describe('expectMiddleware', () => {
     const res = await expectMiddleware(middleware, {}, true);
     expect(res).toEqual({
       status: 200,
+      headers: {},
     });
   });
 });
@@ -113,13 +140,14 @@ describe('givenMiddleware', () => {
     const res = await givenMiddleware(middleware).when({}).expectResponse();
     expect(res).toEqual({
       status: 201,
+      headers: {},
       body: {foo: 'bar'},
     });
   });
 
   test('should reject with response when response not expected', async () => {
     const middleware = (req, res) => res.send();
-    await expect(givenMiddleware(middleware).when({}).expectNext()).rejects.toEqual({status: 200});
+    await expect(givenMiddleware(middleware).when({}).expectNext()).rejects.toEqual({status: 200, headers: {}});
   });
 
   test('should resolve with next when next expected', async () => {

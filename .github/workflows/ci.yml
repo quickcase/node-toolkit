@@ -59,7 +59,7 @@ jobs:
       - name: Run tests
         run: npm test -- --coverage
       - name: Audit dependencies
-        run: npm run audit:check
+        run: npm audit --audit-level=low --production
 
   lint:
     name: Lint

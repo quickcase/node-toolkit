@@ -10,9 +10,7 @@
   "scripts": {
     "prepare": "npm run build",
     "build": "babel src/modules -d lib --ignore 'src/**/*.test.js' && babel src/test-modules -d test --ignore 'src/**/*.test.js'",
-    "test": "jest src",
-    "audit:resolve": "resolve-audit",
-    "audit:check": "check-audit"
+    "test": "jest src"
   },
   "repository": {
     "type": "git",
@@ -37,8 +35,7 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-modules-commonjs": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
-    "jest": "^27.0.3",
-    "npm-audit-resolver": "^2.2.0"
+    "jest": "^27.0.3"
   },
   "babel": {
     "env": {

@@ -61,10 +61,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Setup NodeJS 12
+      - name: Setup NodeJS 14
         uses: actions/setup-node@v2.4.1
         with:
-          node-version: '12.x'
+          node-version: '14'
           cache: 'npm'
 
       - name: Audit dependencies
@@ -99,10 +99,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Setup NodeJS 12
+      - name: Setup NodeJS 14
         uses: actions/setup-node@v2.4.1
         with:
-          node-version: '12.x'
+          node-version: '14'
           cache: 'npm'
           registry-url: https://registry.npmjs.org
           scope: '@quickcase'

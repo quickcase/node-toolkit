@@ -41,21 +41,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Get npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v2.1.6
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Setup NodeJS ${{ matrix.node }}
         uses: actions/setup-node@v2.4.1
         with:
           node-version: ${{ matrix.node }}
+          cache: 'npm'
 
       - name: Install deps
         run: npm ci
@@ -75,6 +65,7 @@ jobs:
         uses: actions/setup-node@v2.4.1
         with:
           node-version: '12.x'
+          cache: 'npm'
 
       - name: Audit dependencies
         run: npm audit --audit-level=low --production
@@ -108,21 +99,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Get npm cache directory
-        id: npm-cache
-        run: |
-          echo "::set-output name=dir::$(npm config get cache)"
-      - uses: actions/cache@v2.1.6
-        with:
-          path: ${{ steps.npm-cache.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
       - name: Setup NodeJS 12
         uses: actions/setup-node@v2.4.1
         with:
           node-version: '12.x'
+          cache: 'npm'
           registry-url: https://registry.npmjs.org
           scope: '@quickcase'
 

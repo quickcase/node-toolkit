@@ -374,12 +374,15 @@ describe('createCase', () => {
     const httpStub = {
       get: (url) => {
         expect(url).toEqual(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
-        return Promise.resolve({data: {token}});
+        return Promise.resolve({data: {token, case_details: {case_data: {field1: 'value0', field2: 'value2'}}}});
       },
       post: (url, body) => {
         expect(url).toEqual(`/case-types/${caseTypeId}/cases`);
         expect(body).toEqual({
-          data: payload.data,
+          data: {
+            field1: 'value1',
+            field2: 'value2',
+          },
           event: {
             id: eventId,
             summary: payload.summary,
@@ -397,7 +400,10 @@ describe('createCase', () => {
     const createdCase = await createCase(httpStub)(caseTypeId)(eventId)(payload);
     expect(createdCase).toEqual({
       id: caseId,
-      data: payload.data,
+      data: {
+        field1: 'value1',
+        field2: 'value2',
+      },
     });
   });
 
@@ -409,12 +415,12 @@ describe('createCase', () => {
     const httpStub = {
       get: (url) => {
         expect(url).toEqual(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
-        return Promise.resolve({data: {token}});
+        return Promise.resolve({data: {token, case_details: {case_data: {}}}});
       },
       post: (url, body) => {
         expect(url).toEqual(`/case-types/${caseTypeId}/cases`);
         expect(body).toEqual({
-          data: undefined,
+          data: {},
           event: {
             id: eventId,
             summary: undefined,
@@ -450,12 +456,15 @@ describe('updateCase', () => {
     const httpStub = {
       get: (url) => {
         expect(url).toEqual(`/cases/${caseId}/event-triggers/${eventId}`);
-        return Promise.resolve({data: {token}});
+        return Promise.resolve({data: {token, case_details: {case_data: {field1: 'value0', field2: 'value2'}}}});
       },
       post: (url, body) => {
         expect(url).toEqual(`/cases/${caseId}/events`);
         expect(body).toEqual({
-          data: payload.data,
+          data: {
+            field1: 'value1',
+            field2: 'value2',
+          },
           event: {
             id: eventId,
             summary: payload.summary,
@@ -473,7 +482,10 @@ describe('updateCase', () => {
     const updatedCase = await updateCase(httpStub)(caseId)(eventId)(payload);
     expect(updatedCase).toEqual({
       id: caseId,
-      data: payload.data,
+      data: {
+        field1: 'value1',
+        field2: 'value2',
+      },
     });
   });
 
@@ -484,12 +496,12 @@ describe('updateCase', () => {
     const httpStub = {
       get: (url) => {
         expect(url).toEqual(`/cases/${caseId}/event-triggers/${eventId}`);
-        return Promise.resolve({data: {token}});
+        return Promise.resolve({data: {token, case_details: {case_data: {}}}});
       },
       post: (url, body) => {
         expect(url).toEqual(`/cases/${caseId}/events`);
         expect(body).toEqual({
-          data: undefined,
+          data: {},
           event: {
             id: eventId,
             summary: undefined,

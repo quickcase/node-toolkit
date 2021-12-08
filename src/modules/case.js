@@ -19,9 +19,9 @@ const COLLECTION_ITEM_PATTERN = /^(?<name>[^\[\]]+)(?:\[(?:(?<colIndex>\d+)|id:(
  * @return {Promise} Promise resolved with the created case
  */
 export const createCase = (http) => (caseTypeId) => (eventId) => async (payload = {}) => {
-  const {data: {token}} = await http.get(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
+  const {data: {token, case_details: {case_data: eventTriggerCaseData}}} = await http.get(`/case-types/${caseTypeId}/event-triggers/${eventId}`);
   const createRes = await http.post(`/case-types/${caseTypeId}/cases`, {
-    data: payload.data,
+    data: {...eventTriggerCaseData, ...payload.data},
     event: {
       id: eventId,
       summary: payload.summary,
@@ -200,9 +200,9 @@ export const isCaseIdentifier36 = (base36String) => isCaseIdentifier(idFrom36(ba
  * @return {Promise} Promise resolved with the updated case
  */
 export const updateCase = (http) => (caseId) => (eventId) => async (payload = {}) => {
-  const {data: {token}} = await http.get(`/cases/${caseId}/event-triggers/${eventId}`);
+  const {data: {token, case_details: {case_data: eventTriggerCaseData}}} = await http.get(`/cases/${caseId}/event-triggers/${eventId}`);
   const updateRes = await http.post(`/cases/${caseId}/events`, {
-    data: payload.data,
+    data: {...eventTriggerCaseData, ...payload.data},
     event: {
       id: eventId,
       summary: payload.summary,

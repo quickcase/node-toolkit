@@ -17,7 +17,7 @@ jobs:
     timeout-minutes: 5
     strategy:
       matrix:
-        node: [ 12, 14, 16 ]
+        node: [ 14, 16, 18 ]
     steps:
       - name: Checkout
         uses: actions/checkout@v2.4.0
@@ -41,10 +41,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Setup NodeJS 14
+      - name: Setup NodeJS 18
         uses: actions/setup-node@v2.5.1
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
 
       - name: Audit dependencies
@@ -78,10 +78,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2.4.0
 
-      - name: Setup NodeJS 14
+      - name: Setup NodeJS 18
         uses: actions/setup-node@v2.5.1
         with:
-          node-version: '14'
+          node-version: '18'
           cache: 'npm'
           registry-url: https://registry.npmjs.org
           scope: '@quickcase'

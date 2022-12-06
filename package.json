@@ -23,7 +23,7 @@
   },
   "homepage": "https://github.com/quickcase/node-toolkit#readme",
   "dependencies": {
-    "axios": "^0.26.0",
+    "axios": "^1.2.1",
     "camelcase": "^6.2.0",
     "jsonschema": "^1.4.0",
     "jsonwebtoken": "^8.5.1",

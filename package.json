@@ -70,7 +70,7 @@
       }
     },
     "moduleNameMapper": {
-      "^axios$": "axios/dist/node/axios.cjs"
+      "^axios$": "<rootDir>/node_modules/axios/dist/node/axios.cjs"
     }
   }
 }

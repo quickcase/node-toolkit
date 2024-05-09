@@ -27,7 +27,6 @@ describe('clientAccessTokenProvider', () => {
 
       expect(lastPost[0]).toEqual('https://idam/oauth2/token');
       expect(lastPost[1].get('grant_type')).toEqual('client_credentials');
-      expect(lastPost[1].get('client_id')).toEqual('client-123');
       expect(lastPost[2]).toEqual({
         headers: {
           authorization: 'Basic Y2xpZW50LTEyMzpzZWNyZXQtMTIz',

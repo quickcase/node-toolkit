@@ -43,5 +43,4 @@ const extractToken = (response) => response.data.access_token;
 
 const params = (config) => ({
   grant_type: 'client_credentials',
-  client_id: config.clientId,
 });

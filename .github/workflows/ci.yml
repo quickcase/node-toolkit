@@ -48,7 +48,7 @@ jobs:
           cache: 'npm'
 
       - name: Audit dependencies
-        run: npm audit --audit-level=low --production
+        run: npm audit --audit-level=low --omit=dev
 
   lint:
     name: Lint

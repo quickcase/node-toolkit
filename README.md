@@ -1190,6 +1190,16 @@ s.data('level1', 'level2');
 // 'data.level1.level2'
 ```
 
+##### compareToField(field)
+
+Build value as field to facilitate field to field comparison. Can only be used in context of a value in a search dsl 
+predicate
+
+```js
+s.greaterThan('field1', s.compareToField('field2'));
+// greaterThan: {field: field1, value: {field: field2}}
+```
+
 ##### contains(field, value)
 
 Build a criterion matching `MultiSelectList` and `Collection` fields which contains the provided value.
@@ -1230,6 +1240,26 @@ Dynamic field names must be prefixed with `data.`.
 ##### is(field, boolean)
 
 Build a criterion matching `YesOrNo` fields that are either `true` or `false`.
+Dynamic field names must be prefixed with `data.`.
+
+##### greaterThan(field, value)
+
+Build a criterion matching on field greater than provided value.
+Dynamic field names must be prefixed with `data.`.
+
+##### greaterThanOrEquals(field, value)
+
+Build a criterion matching on field greater than or equals provided value.
+Dynamic field names must be prefixed with `data.`.
+
+##### lessThan(field, value)
+
+Build a criterion matching on field less than provided value.
+Dynamic field names must be prefixed with `data.`.
+
+##### lessThanOrEquals(field, value)
+
+Build a criterion matching on field less than or equals provided value.
 Dynamic field names must be prefixed with `data.`.
 
 ##### sort(...instructions)
@@ -1273,7 +1303,11 @@ const query = s.query(
     s.equalsAny(s.data('field2'), ['VALUE_1', 'VALUE_2']),
     s.equalsAnyIgnoreCase(s.data('field2'), ['value_1', 'value_2']),
     s.hasValue(s.data('field3'), true),
-    s.is(s.data('yesOrNoField'), true),
+    s.is(s.data('yesOrNoField'), true), 
+    s.greaterThan(s.data('numberField1'), 10), 
+    s.greaterThanOrEquals(s.data('numberField2'), 10),  
+    s.lessThan(s.data('numberField3'), 10), 
+    s.lessThanOrEquals(s.data('numberField4'), 10),  
   )
 );
 

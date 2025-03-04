@@ -33,6 +33,10 @@ const hasValue = matcher('hasValue');
 const dateRange = matcher('dateRange');
 const contains = matcher('contains');
 const is = matcher('is');
+const greaterThan = matcher('greaterThan');
+const greaterThanOrEquals = matcher('greaterThanOrEquals');
+const lessThan = matcher('lessThan');
+const lessThanOrEquals = matcher('lessThanOrEquals');
 
 const and = (...criteria) => ({
   and: criteria,
@@ -83,9 +87,19 @@ const collectionItem = (field, value) => ({
   field, value
 });
 
+/**
+ * Build value as field in field to field comparison. Can only be used in context of value for a given querydsl.
+ * @param field - field name to compare with
+ * @returns {{field}} object representing field to be compared
+ */
+const compareToField = (field) => ({
+  field,
+});
+
 export const searchDsl = Object.freeze({
   not,
   and,
+  compareToField,
   data,
   equals,
   equalsIgnoreCase,
@@ -95,6 +109,10 @@ export const searchDsl = Object.freeze({
   dateRange,
   contains,
   is,
+  greaterThan,
+  greaterThanOrEquals,
+  lessThan,
+  lessThanOrEquals,
   page,
   query,
   or,

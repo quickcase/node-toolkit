@@ -3,8 +3,8 @@ import {search, searchDsl as dsl} from './search';
 describe('search', () => {
   test('should perform search', async () => {
     const resData = {
-      total: { count: 2, pages: 1 },
-      page: { index: 1, size: 25 },
+      total: {count: 2, pages: 1},
+      page: {index: 1, size: 25},
       results: [
         {}, {}
       ],
@@ -219,4 +219,56 @@ describe('searchDsl', () => {
     expect(dsl.data('level1', 'level2')).toEqual('data.level1.level2');
     expect(dsl.data(...['level1', 'level2'])).toEqual('data.level1.level2');
   })
+
+  test('should return `greaterThan` matcher', () => {
+    const greaterThan = dsl.greaterThan('field1', 1);
+    expect(greaterThan).toEqual({
+      greaterThan: {
+        field: 'field1',
+        value: 1
+      }
+    });
+  });
+
+  test('should return `greaterThanOrEquals` matcher', () => {
+    const greaterThanOrEquals = dsl.greaterThanOrEquals('field1', 1);
+    expect(greaterThanOrEquals).toEqual({
+      greaterThanOrEquals: {
+        field: 'field1',
+        value: 1
+      }
+    });
+  });
+
+  test('should return `lessThan` matcher', () => {
+    const lessThan = dsl.lessThan('field1', 1);
+    expect(lessThan).toEqual({
+      lessThan: {
+        field: 'field1',
+        value: 1
+      }
+    });
+  });
+
+  test('should return `lessThanOrEquals` matcher', () => {
+    const lessThanOrEquals = dsl.lessThanOrEquals('field1', 1);
+    expect(lessThanOrEquals).toEqual({
+      lessThanOrEquals: {
+        field: 'field1',
+        value: 1
+      }
+    });
+  });
+
+  test('should return `lessThanOrEquals` matcher for field to field comparison', () => {
+    const lessThanOrEquals = dsl.lessThanOrEquals('field1', dsl.compareToField('field2'));
+    expect(lessThanOrEquals).toEqual({
+      lessThanOrEquals: {
+        field: 'field1',
+        value: {
+          field: 'field2',
+        }
+      }
+    });
+  });
 });

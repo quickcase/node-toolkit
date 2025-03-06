@@ -18,9 +18,15 @@ export const httpClient = (baseUrl, axiosInstance = axios) => (accessTokenProvid
   put: bodyRequest(axiosInstance.put)(urlBuilder(baseUrl))(accessTokenProvider),
 });
 
-const emptyRequest = (axiosFn) => (url) => (accessTokenProvider) => async (relativeUrl) => axiosFn(url(relativeUrl), headers(await authorization(accessTokenProvider)));
+const emptyRequest = (axiosFn) => (url) => (accessTokenProvider) => async (relativeUrl, params) => axiosFn(url(relativeUrl), {
+  ...headers(await authorization(accessTokenProvider)),
+  params,
+});
 
-const bodyRequest = (axiosFn) => (url) => (accessTokenProvider) => async (relativeUrl, body) => axiosFn(url(relativeUrl), body, headers(await authorization(accessTokenProvider)));
+const bodyRequest = (axiosFn) => (url) => (accessTokenProvider) => async (relativeUrl, body, params) => axiosFn(url(relativeUrl), body, {
+  ...headers(await authorization(accessTokenProvider)),
+  params,
+});
 
 const urlBuilder = (baseUrl) => (relativeUrl) => baseUrl + relativeUrl;
 

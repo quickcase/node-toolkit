@@ -26,6 +26,35 @@ describe('search', () => {
 
     expect(data).toEqual(resData);
   });
+
+  test('should perform search with parameters', async () => {
+    const resData = {
+      total: {count: 2, pages: 1},
+      page: {index: 1, size: 25},
+      results: [
+        {}, {}
+      ],
+    };
+
+    const httpStub = {
+      post: (url, body, params) => {
+        expect(url).toEqual('/case-types/CaseType1/cases/search');
+        expect(body).toEqual({
+          query: 'criteria',
+          sort: 'order',
+          page: 'limit',
+        });
+        expect(params).toEqual({
+          filter: 'test',
+        });
+        return Promise.resolve({data: resData});
+      },
+    };
+
+    const data = await search(httpStub)('CaseType1')({query: 'criteria'})({sort: 'order'})({page: 'limit'}, {filter: 'test'});
+
+    expect(data).toEqual(resData);
+  });
 });
 
 describe('searchDsl', () => {
@@ -269,6 +298,46 @@ describe('searchDsl', () => {
           field: 'field2',
         }
       }
+    });
+  });
+});
+
+describe('searchParams', () => {
+  test('should build search parameter for links', () => {
+    const params = dsl.searchParams().withLinks().build();
+    expect(params).toEqual({
+      ['with-links']: 'true'
+    });
+  });
+
+  test('should build search parameter for a single computed field', () => {
+    const params = dsl.searchParams().withComputedFields('computedField1').build();
+    expect(params).toEqual({
+      ['computed-fields']: 'computedField1',
+    });
+  });
+
+  test('should build search parameter for multiple computed fields', () => {
+    const params = dsl.searchParams().withComputedFields('computedField1', 'computedField2').build();
+    expect(params).toEqual({
+      ['computed-fields']: 'computedField1,computedField2',
+    });
+  });
+
+  test('should not build search parameter for computed fields when none are provided', () => {
+    const params = dsl.searchParams().withComputedFields().build();
+    expect(params).toEqual({});
+  });
+
+  test('should build search parameters for provided additional parameters', () => {
+    const params = dsl.searchParams({param1: 'test'})
+      .withLinks()
+      .withComputedFields('computedField1')
+      .build();
+    expect(params).toEqual({
+      param1: 'test',
+      ['with-links']: 'true',
+      ['computed-fields']: 'computedField1',
     });
   });
 });

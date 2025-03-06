@@ -2,14 +2,14 @@
  * Search
  */
 
- export const search = (http) => (caseTypeId) => (query) => (sort) => async (page) => {
+ export const search = (http) => (caseTypeId) => (query) => (sort) => async (page, params) => {
    const url = `/case-types/${caseTypeId}/cases/search`;
    const body = {
      ...query,
      ...sort,
      ...page,
    };
-   const res = await http.post(url, body);
+   const res = await http.post(url, body, params);
    return res.data;
  };
 
@@ -96,6 +96,30 @@ const compareToField = (field) => ({
   field,
 });
 
+/**
+ * Build optional search request parameters
+ * @param additionalParams - optional additional parameters to be included in the search query parameters
+ * @returns object with optional parameters to build
+ */
+const searchParams = (additionalParams) => {
+  const params = {...additionalParams};
+  return {
+    withLinks: function () {
+      Object.assign(params, {['with-links']: 'true'});
+      return this;
+    },
+    withComputedFields: function (...computedFields) {
+      if (computedFields?.length > 0) {
+        Object.assign(params, {['computed-fields']: computedFields.join(',')});
+      }
+      return this;
+    },
+    build: function () {
+      return params;
+    },
+  }
+};
+
 export const searchDsl = Object.freeze({
   not,
   and,
@@ -116,6 +140,7 @@ export const searchDsl = Object.freeze({
   page,
   query,
   or,
+  searchParams,
   sort,
   sortAsc,
   sortDesc,

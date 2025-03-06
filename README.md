@@ -1285,6 +1285,19 @@ Build the top-level `page` object.
 * `index` is the number of the results page to retrieve and starts at `1`
 * `size` is the maximum number of results to retrieve per page and is capped at `100`
 
+#### searchParams(additionalProperties)
+
+Build optional search request parameters
+
+* `additionalProperties` - additional properties to be passed as request parameters
+
+```js
+s.searchParams()
+    .withLinks()
+    .withComputedFields('computedField')
+    .build();
+```
+
 #### Example
 
 ```javascript
@@ -1318,7 +1331,12 @@ const sort = s.sort(
 
 const page = s.page(1, 30);
 
-const response = await search(searchClient)('CaseType1')(query)(sort)(page);
+const params = s.searchParams()
+                    .withLinks()
+                    .withComputedFields('computedField')
+                    .build();
+
+const response = await search(searchClient)('CaseType1')(query)(sort)(page, params);
 ```
 
 ### Redis Gateway

@@ -97,6 +97,13 @@ const compareToField = (field) => ({
 });
 
 /**
+ * Return field name with a prefix to identify a computed field in querydsl
+ * @param computedFieldName - computed field name
+ * @returns {String} field name prefixed with identifier for computed field
+ */
+const computedField = (computedFieldName) => ':' + computedFieldName;
+
+/**
  * Build optional search request parameters
  * @param additionalParams - optional additional parameters to be included in the search query parameters
  * @returns object with optional parameters to build
@@ -124,6 +131,7 @@ export const searchDsl = Object.freeze({
   not,
   and,
   compareToField,
+  computedField,
   data,
   equals,
   equalsIgnoreCase,

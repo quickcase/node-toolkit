@@ -247,6 +247,10 @@ describe('searchDsl', () => {
     expect(dsl.data('level1.level2')).toEqual('data.level1.level2');
     expect(dsl.data('level1', 'level2')).toEqual('data.level1.level2');
     expect(dsl.data(...['level1', 'level2'])).toEqual('data.level1.level2');
+  });
+
+  test('should return computed field prefixed with identifier', () => {
+    expect(dsl.computedField('computedField')).toEqual(':computedField');
   })
 
   test('should return `greaterThan` matcher', () => {

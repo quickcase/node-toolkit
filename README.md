@@ -1200,6 +1200,15 @@ s.greaterThan('field1', s.compareToField('field2'));
 // greaterThan: {field: field1, value: {field: field2}}
 ```
 
+##### computedField(field)
+
+Prefix field with identifier for a computed field.
+
+```js
+s.computedField('computedField');
+// ':computedField'
+```
+
 ##### contains(field, value)
 
 Build a criterion matching `MultiSelectList` and `Collection` fields which contains the provided value.
@@ -1318,9 +1327,9 @@ const query = s.query(
     s.hasValue(s.data('field3'), true),
     s.is(s.data('yesOrNoField'), true), 
     s.greaterThan(s.data('numberField1'), 10), 
-    s.greaterThanOrEquals(s.data('numberField2'), 10),  
+    s.greaterThanOrEquals(s.data('numberField2'), s.compareToField('numberField1')),  
     s.lessThan(s.data('numberField3'), 10), 
-    s.lessThanOrEquals(s.data('numberField4'), 10),  
+    s.lessThanOrEquals(s.computedField('numberField4'), 10),
   )
 );
 

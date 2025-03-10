@@ -37,11 +37,12 @@ export const createCase = (http) => (caseTypeId) => (eventId) => async (payload 
  *
  * @param {httpClient} http Configured, ready-to-use HTTP client
  * @param {string|number} caseId 16-digit unique case identifier
+ * @param {object} - request parameters for the get request
  * @return {Promise} Promise resolved with the case for the given identifier.
  */
-export const fetchCase = (http) => (caseId) => async () => {
+export const fetchCase = (http) => (caseId, params) => async () => {
   const url = `/cases/${caseId}`;
-  const res = await http.get(url);
+  const res = await http.get(url, params);
   return res.data;
 };
 

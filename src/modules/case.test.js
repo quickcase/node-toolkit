@@ -26,6 +26,24 @@ describe('fetchCase', () => {
     const actualData = await fetchCase(httpStub)(caseId)();
     expect(actualData).toEqual(resData);
   });
+
+  test('should fetch case by id with request parameters', async () => {
+    const caseId = '1234123412341238';
+    const resData = {
+      id: caseId,
+      data: {},
+    };
+    const httpStub = {
+      get: (url, params) => {
+        expect(url).toEqual(`/cases/${caseId}`);
+        expect(params).toEqual({field: 'field1'});
+        return Promise.resolve({data: resData});
+      },
+    };
+
+    const actualData = await fetchCase(httpStub)(caseId, {field: 'field1'})();
+    expect(actualData).toEqual(resData);
+  });
 });
 
 describe('fieldExtractor', () => {

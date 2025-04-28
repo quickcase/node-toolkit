@@ -42,5 +42,6 @@ const getNewToken = async (config) => extractToken(await postToken(config, param
 const extractToken = (response) => response.data.access_token;
 
 const params = (config) => ({
+  ...config,
   grant_type: 'client_credentials',
 });

@@ -10,6 +10,7 @@ describe('clientAccessTokenProvider', () => {
     tokenEndpoint: 'https://idam/oauth2/token',
     clientId: 'client-123',
     clientSecret: 'secret-123',
+    scope: 'some/scope',
   });
 
   beforeEach(() => {
@@ -27,6 +28,7 @@ describe('clientAccessTokenProvider', () => {
 
       expect(lastPost[0]).toEqual('https://idam/oauth2/token');
       expect(lastPost[1].get('grant_type')).toEqual('client_credentials');
+      expect(lastPost[1].get('scope')).toEqual('some/scope');
       expect(lastPost[2]).toEqual({
         headers: {
           authorization: 'Basic Y2xpZW50LTEyMzpzZWNyZXQtMTIz',
